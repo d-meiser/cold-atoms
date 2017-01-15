@@ -5,10 +5,10 @@ test:
 	nosetests
 
 develop:
-  python setup.py develop
+	python setup.py develop
 
 install:
-  python setup.py install
+	python setup.py install
 
 .PHONY: init test
 
