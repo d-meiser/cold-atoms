@@ -4,6 +4,9 @@ init:
 test:
 	nosetests
 
+run-notebooks:
+	cd examples && python run_notebooks.py && cd .
+
 develop:
 	python setup.py develop
 
