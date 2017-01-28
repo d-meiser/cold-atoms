@@ -1,8 +1,5 @@
 numpy
 nose
 sphinx
-nbformat
-nbconvert
 jupyter
-six
 
