@@ -31,8 +31,7 @@ notebooks = ['./Free particles and ballistic expansion.ipynb']
 if __name__ == '__main__':
     num_errors = 0
     for n in notebooks:
-        print(n + ' ... ', end="")
-        sys.stdout.flush()
+        print(n + ' ... ')
         err = notebook_run(n)
         num_errors += err
         if err == 0:
