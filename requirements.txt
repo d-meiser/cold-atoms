@@ -1,6 +1,6 @@
 numpy
+matplotlib
 nose
 sphinx
-jupyter_console
 jupyter
 
