@@ -1,5 +1,6 @@
 numpy
 nose
 sphinx
+jupyter_console
 jupyter
 
