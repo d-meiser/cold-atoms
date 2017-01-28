@@ -3,4 +3,5 @@ nose
 sphinx
 nbformat
 nbconvert
+jupyter
 
