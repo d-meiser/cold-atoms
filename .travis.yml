@@ -5,8 +5,8 @@ python:
 install:
   - pip install --upgrade pip
   - make init
+  - make install
 script:
   - make test
   - make run-notebooks
-  - make install
 
