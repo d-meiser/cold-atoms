@@ -2,15 +2,18 @@ import sys
 import subprocess
 import tempfile
 import os.path
+import io
 
 import nbformat
 from nbconvert.preprocessors import ExecutePreprocessor
 
 
 def notebook_run(notebook_file):
-    with open(notebook_file) as f:
+    with io.open(notebook_file) as f:
         nb = nbformat.read(f, as_version=4)
-        ep = ExecutePreprocessor(timeout=100)
+        ep = ExecutePreprocessor(timeout=100,
+                                 kernel_name='python' +
+                                 str(sys.version_info.major))
         err = 0
         try:
             ep.preprocess(nb, {})
@@ -20,7 +23,7 @@ def notebook_run(notebook_file):
         finally:
             base_extension = os.path.splitext(notebook_file)
             outfile_name = base_extension[0] + '_out' + base_extension[-1]
-            with open(outfile_name, mode='wt') as fout:
+            with io.open(outfile_name, mode='wt') as fout:
                 nbformat.write(nb, fout)
         return err
 
