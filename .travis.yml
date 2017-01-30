@@ -4,9 +4,12 @@ python:
   - "3.4"
 install:
   - pip install --upgrade pip
+  - pip install coveralls
   - make init
   - make install
 script:
   - make test
   - make run-notebooks
+after_success:
+  - coveralls --rcfile=.coveragerc
 

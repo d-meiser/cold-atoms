@@ -2,7 +2,7 @@ init:
 	pip install -r requirements.txt
 
 test:
-	nosetests
+	nosetests --with-coverage --cover-package=coldatoms --logging-level=INFO
 
 run-notebooks:
 	cd examples && python run_notebooks.py && cd .
