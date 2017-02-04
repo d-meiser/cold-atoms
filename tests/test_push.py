@@ -8,7 +8,7 @@ def test_zero_velocities():
     x = np.random.rand(3)
     v = np.zeros(3)
     x_old = x.copy()
-    coldatoms.push(1.0, x, v)
+    coldatoms.drift_kick(1.0, 0.1, x, v)
     assert(x == x_old).all()
 
 
@@ -16,7 +16,7 @@ def test_zero_accelerations():
     x = np.random.rand(3)
     v = np.random.rand(3)
     v_old = v.copy()
-    coldatoms.push(1.0, x, v)
+    coldatoms.drift_kick(1.0, 1.0, x, v)
     assert(v == v_old).all()
 
 
@@ -39,7 +39,7 @@ def test_harmonic_potential_motion_is_bounded():
 
     harmonic = Harmonic([1.0, 2.0, 3.0])
     for i in range(100):
-        coldatoms.push(1.0, x, v, [harmonic])
+        coldatoms.drift_kick(1.0, 1.0, x, v, [harmonic])
 
     stddev_vel = np.linalg.norm(v)
     assert(stddev_vel < 10.0 * initial_stddev_vel)
