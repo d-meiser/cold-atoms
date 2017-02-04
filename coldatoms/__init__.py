@@ -1,1 +1,1 @@
-from .particles import drift_kick
+from .particles import drift_kick, Ensemble

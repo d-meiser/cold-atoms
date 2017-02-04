@@ -2,8 +2,6 @@ from .context import coldatoms
 import numpy as np
 import math
 
-import unittest
-
 
 def test_zero_velocities():
     x = np.random.rand(3)
