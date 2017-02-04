@@ -33,15 +33,24 @@ class Ensemble(object):
         self.particle_properties[key] = np.copy(prop)
 
 
-def drift_kick(dt, m, x, v, forces=[]):
+def drift_kick(dt, ensemble, forces=[]):
     """Drift-Kick-Drift push of particles."""
     if len(forces) == 0:
-        x += dt * v
+        ensemble.x += dt * ensemble.v
     else:
-        x += 0.5 * dt * v
-        f = np.zeros_like(v)
+        ensemble.x += 0.5 * dt * ensemble.v
+
+        f = np.zeros_like(ensemble.v)
         for force in forces:
-            f += force(x, v)
-        v += (dt / m) * f
-        x += 0.5 * dt * v
+            f += force(ensemble)
+
+        m = 0.0
+        if 'mass' in ensemble.ensemble_properties:
+            m = ensemble.ensemble_properties['mass']
+        elif 'mass' in ensemble.particle_properties:
+            m = ensemble.particle_properties['mass']
+        else:
+            raise RuntimeError('To accelerate particles we need a mass ensemble or particle property')
+        ensemble.v += (dt / m) * f
+        ensemble.x += 0.5 * dt * ensemble.v
 
