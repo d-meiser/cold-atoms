@@ -1,6 +1,7 @@
 from .context import coldatoms
 import numpy as np
 import math
+from nose.tools import *
 
 
 def test_zero_velocities():
@@ -87,6 +88,18 @@ def test_can_use_per_particle_masses():
     harmonic = Harmonic(k)
 
     coldatoms.drift_kick(dt, ensemble, [harmonic])
+
+
+@raises(Exception)
+def test_have_to_provide_mass():
+    ensemble = coldatoms.Ensemble(num_ptcls=3)
+    ensemble.x = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+    ensemble.v = np.zeros_like(ensemble.x)
+
+    k = [1.0, 2.0, 3.0]
+    harmonic = Harmonic(k)
+
+    coldatoms.drift_kick(0.1, ensemble, [harmonic])
 
 
 if __name__ == '__main__':
