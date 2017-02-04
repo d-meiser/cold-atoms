@@ -76,6 +76,19 @@ def test_harmonic_spot():
     assert(abs(ensemble.x[2, 2] - math.cos(t * omega_z)) < dt*dt)
 
 
+def test_can_use_per_particle_masses():
+    ensemble = coldatoms.Ensemble(num_ptcls=3)
+    ensemble.x = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+    ensemble.v = np.zeros_like(ensemble.x)
+    ensemble.set_particle_property('mass', np.ones(3)) 
+
+    dt = 0.02
+    k = [1.0, 2.0, 3.0]
+    harmonic = Harmonic(k)
+
+    coldatoms.drift_kick(dt, ensemble, [harmonic])
+
+
 if __name__ == '__main__':
     unittest.main()
 

@@ -1,6 +1,7 @@
 from .context import coldatoms
 import numpy as np
 import math
+from nose.tools import *
 
 
 def test_construct_ensemble():
@@ -35,10 +36,7 @@ def test_can_set_particle_property():
     assert(mass.shape[0] == ensemble.num_ptcls)
 
 
+@raises(Exception)
 def test_bad_shape_of_particle_props_raises_exception():
     ensemble = coldatoms.Ensemble(10)
-    try:
-        ensemble.set_particle_properties('mass', np.ones(12))
-    except:
-        return
-    assert(0)
+    ensemble.set_particle_property('mass', np.ones(12))
