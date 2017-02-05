@@ -74,9 +74,10 @@ class Source(object):
         pass
 
 
-def produce_ptcls(ensemble, sources=[]):
+def produce_ptcls(dt, ensemble, sources=[]):
     """Insert particles produced by sources into the ensemble.
 
+    dt -- Length of time interval for which to produce particles.
     ensemble -- The ensemble into which to insert the particles.
     sources -- The particle source. Should derive from Source.
     """
@@ -84,7 +85,7 @@ def produce_ptcls(ensemble, sources=[]):
     num_new_ptcls = []
     tot_new_ptcls = 0
     for s in sources:
-        num_new_ptcls.append(s.num_ptcls_produced())
+        num_new_ptcls.append(s.num_ptcls_produced(dt))
         tot_new_ptcls += num_new_ptcls[-1]
 
     start = ensemble.num_ptcls
