@@ -40,3 +40,25 @@ def test_can_set_particle_property():
 def test_bad_shape_of_particle_props_raises_exception():
     ensemble = coldatoms.Ensemble(10)
     ensemble.set_particle_property('mass', np.ones(12))
+
+
+def test_can_grow():
+    ensemble = coldatoms.Ensemble(12)
+    new_size = 15
+    ensemble.resize(new_size)
+    assert(ensemble.num_ptcls == new_size)
+
+
+def test_can_shrink():
+    ensemble = coldatoms.Ensemble(12)
+    new_size = 9
+    ensemble.resize(new_size)
+    assert(ensemble.num_ptcls == new_size)
+
+def test_can_resize_with_particle_props():
+    ensemble = coldatoms.Ensemble(12)
+    ensemble.set_particle_property('mass', np.ones(12))
+    new_size = 15
+    ensemble.resize(new_size)
+    assert(ensemble.num_ptcls == new_size)
+    assert(ensemble.particle_properties['mass'].shape[0] == new_size)

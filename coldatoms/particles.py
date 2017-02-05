@@ -32,6 +32,46 @@ class Ensemble(object):
                 'Size of property array does not match number of particles.')
         self.particle_properties[key] = np.copy(prop)
 
+    def resize(self, new_size):
+        shape = [self.x.shape]
+        shape[0] = new_size
+        self.x.resize(shape)
+        self.v.resize(shape)
+        for particle_prop in self.particle_properties:
+            shape = [self.particle_properties[particle_prop].shape]
+            shape[0] = new_size
+            self.particle_properties[particle_prop].resize(shape)
+
+
+
+class Source(object):
+    """A particle source."""
+
+    def __init__(self):
+        pass
+
+    def num_ptcls_produced(self):
+        return 0
+
+    def produce_ptcls(start, end, ensemble):
+        pass
+
+
+def produce_particles(ensemble, sources=[]):
+    """Insert particles produced by sources into the ensemble.
+
+    ensemble -- The ensemble into which to insert the particles.
+    sources -- The particle source. Should derive from Source.
+    """
+
+    num_new_ptcls = []
+    tot_new_ptcls = 0
+    for s in sources:
+        num_new_ptcls.append(s.num_ptcls_produced())
+        tot_new_ptcls += num_new_ptcls[-1]
+
+    ensemble.resize(ensemble.num_ptcls + tot_new_ptcls)
+
 
 def drift_kick(dt, ensemble, forces=[]):
     """Drift-Kick-Drift push of particles."""
