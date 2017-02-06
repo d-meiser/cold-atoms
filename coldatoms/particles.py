@@ -91,7 +91,7 @@ def produce_ptcls(dt, ensemble, sources=[]):
     start = ensemble.num_ptcls
     ensemble.resize(ensemble.num_ptcls + tot_new_ptcls)
     for i, s in enumerate(sources):
-        s.produce_ptcls(start, start + num_new_ptcls[i], ensemble)
+        s.produce_ptcls(dt, start, start + num_new_ptcls[i], ensemble)
         start += num_new_ptcls[i]
 
 
