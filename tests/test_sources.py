@@ -15,7 +15,7 @@ class TrivialSource(coldatoms.Source):
     def num_ptcls_produced(self, dt):
         return TrivialSource.num_ptcls
 
-    def produce_ptcls(self, start, end, ensemble):
+    def produce_ptcls(self, dt, start, end, ensemble):
         for i in range(start, end):
             ensemble.x[i, 0] = i
 
