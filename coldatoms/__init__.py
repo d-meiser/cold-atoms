@@ -1,1 +1,1 @@
-from .particles import drift_kick, Ensemble, Source, produce_ptcls
+from .particles import drift_kick, Ensemble, Sink, Source, produce_ptcls

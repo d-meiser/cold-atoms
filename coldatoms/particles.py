@@ -70,7 +70,10 @@ class Source(object):
         call to num_ptcls_produced(). We can expect end - start ==
         num_ptcls_produced().
 
-        dt -- The duration of the time interval for which to produce particles.  To make start and end and dt consistent with one another this dt should be the same as the dt passed to num_ptcls_produced to obtain start and end.
+        dt -- The duration of the time interval for which to produce particles.
+        To make start and end and dt consistent with one another this dt should
+        be the same as the dt passed to num_ptcls_produced to obtain start and
+        end.
         start -- First position in ensemble where particles will be inserted.
         end -- One past the last position in the ensemble where particles will
         be inserted.
@@ -97,6 +100,33 @@ def produce_ptcls(dt, ensemble, sources=[]):
     for i, s in enumerate(sources):
         s.produce_ptcls(dt, start, start + num_new_ptcls[i], ensemble)
         start += num_new_ptcls[i]
+
+
+class Sink(object):
+    """A particle sink.
+
+    Conceptually, sinks are represented by surfaces that remove particles from
+    an ensemble if they hit the surface."""
+
+    def find_absorption_time(self, x, v, dt):
+        """The time at which particles will be arbsorbed by the sink.
+
+        This method returns the time interval after which particles starting at
+        x and traveling with velocity vector v along a straight line will hit
+        the sink surface. dt is the duration of the interval in which an
+        absorption time is sought. If the particle will not hit the sink in
+        interval dt the function should return an absorption time greater than
+        dt.
+
+        x -- Initial particle positions.
+        v -- Particle velocities.
+        dt -- Length of time interval.
+        """
+        return np.full(x.shape[0], 2.0 * dt)
+
+    def absorb_particle(self, x, v, dt):
+        """This function gets called when this sink absorbs a particle."""
+        pass
 
 
 def drift_kick(dt, ensemble, forces=[]):

@@ -46,4 +46,3 @@ def test_can_use_multiple_sources():
         assert(abs(ensemble.x[i, 0] - i) < 1.0e-6)
 
 
-
