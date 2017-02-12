@@ -129,6 +129,30 @@ class Sink(object):
         pass
 
 
+class SinkPlane(Sink):
+
+    def __init__(self, point, normal):
+        """Generate a sink that absorbs particles hitting a plane.
+
+        point -- A point in the plane.
+        normal -- A normal to the plane.
+        """
+        self.point = point
+        self.normal = normal
+
+    def find_absorption_time(self, x, v, dt):
+        taus = np.zeros(x.shape[0])
+
+        for i in range(x.shape[0]):
+            normal_velocity = self.normal.dot(v[i])
+            if (normal_velocity == 0.0):
+                taus[i] = 2.0 * dt
+            else:
+                taus[i] = self.normal.dot(self.point - x[i]) / normal_velocity
+
+        return taus
+
+
 def drift_kick(dt, ensemble, forces=[]):
     """Drift-Kick-Drift push of particles."""
     if len(forces) == 0:
