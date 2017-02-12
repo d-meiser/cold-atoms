@@ -42,6 +42,17 @@ class Ensemble(object):
             shape[0] = new_size
             self.particle_properties[particle_prop].resize(shape)
 
+    def delete(self, indices):
+        """Delete a subset of particles.
+
+        The particles will be deleted inplace, i.e. the ensemble is mutated.
+
+        indices -- The indices of particles to delete.
+        """
+        self.x = np.delete(self.x, indices, 0)
+        self.v = np.delete(self.v, indices, 0)
+        for property in self.particle_properties:
+            property = np.delete(property, indices, 0)
 
 
 class Source(object):
@@ -124,8 +135,14 @@ class Sink(object):
         """
         return np.full(x.shape[0], 2.0 * dt)
 
-    def absorb_particle(self, x, v, dt):
-        """This function gets called when this sink absorbs a particle."""
+    def absorb_particles(self, ensemble, dt, absorption_times, absorption_indices):
+        """This function gets called when this sink absorbs a particle.
+
+        ensemble -- The ensemble with particles which are potentially absorbed by this sink.
+        dt -- The time interval during which we are processing decay events.
+        absorption_times -- The times at which particles may be absorbed.
+        absorption_indices -- The indices of particles which are being absorbed by this sink.
+        """
         pass
 
 
@@ -151,6 +168,14 @@ class SinkPlane(Sink):
                 taus[i] = self.normal.dot(self.point - x[i]) / normal_velocity
 
         return taus
+
+
+def process_sink(dt, ensemble, sink):
+    absorption_times = sink.find_absorption_time(ensemble.x, ensemble.v, dt)
+    absorption_indices = np.arange(ensemble.num_ptcls)[
+        abs(absorption_times - 0.5 * dt) <= 0.5 * dt]
+    sink.absorb_particles(ensemble, dt, absorption_times, absorption_indices)
+    ensemble.delete(absorption_indices)
 
 
 def drift_kick(dt, ensemble, forces=[]):
