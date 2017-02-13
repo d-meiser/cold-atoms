@@ -70,6 +70,7 @@ target/
 
 # IPython Notebook
 .ipynb_checkpoints
+Untitled*
 
 # pyenv
 .python-version
