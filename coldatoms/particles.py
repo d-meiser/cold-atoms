@@ -158,7 +158,7 @@ class SinkPlane(Sink):
         self.normal = normal
 
     def find_absorption_time(self, x, v, dt):
-        taus = np.zeros(x.shape[0])
+        taus = np.empty(x.shape[0])
 
         for i in range(x.shape[0]):
             normal_velocity = self.normal.dot(v[i])
