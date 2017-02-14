@@ -171,6 +171,8 @@ class SinkPlane(Sink):
 
 
 def process_sink(dt, ensemble, sink):
+    if sink == None:
+        return
     absorption_times = sink.find_absorption_time(ensemble.x, ensemble.v, dt)
     absorption_indices = np.arange(ensemble.num_ptcls)[
         abs(absorption_times - 0.5 * dt) <= 0.5 * dt]
@@ -178,11 +180,14 @@ def process_sink(dt, ensemble, sink):
     ensemble.delete(absorption_indices)
 
 
-def drift_kick(dt, ensemble, forces=[]):
+def drift_kick(dt, ensemble, forces=[], sink=None):
     """Drift-Kick-Drift push of particles."""
     if len(forces) == 0:
+        process_sink(dt, ensemble, sink)
         ensemble.x += dt * ensemble.v
     else:
+        process_sink(0.5 * dt, ensemble, sink)
+
         ensemble.x += 0.5 * dt * ensemble.v
 
         f = np.zeros_like(ensemble.v)
@@ -197,5 +202,8 @@ def drift_kick(dt, ensemble, forces=[]):
         else:
             raise RuntimeError('To accelerate particles we need a mass ensemble or particle property')
         ensemble.v += (dt / m) * f
+
+        process_sink(0.5 * dt, ensemble, sink)
+
         ensemble.x += 0.5 * dt * ensemble.v
 
