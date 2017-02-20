@@ -135,7 +135,7 @@ class Sink(object):
         """
         return np.full(x.shape[0], 2.0 * dt)
 
-    def absorb_particles(self, ensemble, dt, absorption_times, absorption_indices):
+    def record_absorption(self, ensemble, dt, absorption_times, absorption_indices):
         """This function gets called when this sink absorbs a particle.
 
         ensemble -- The ensemble with particles which are potentially absorbed by this sink.
@@ -176,7 +176,7 @@ def process_sink(dt, ensemble, sink):
     absorption_times = sink.find_absorption_time(ensemble.x, ensemble.v, dt)
     absorption_indices = np.arange(ensemble.num_ptcls)[
         abs(absorption_times - 0.5 * dt) <= 0.5 * dt]
-    sink.absorb_particles(ensemble, dt, absorption_times, absorption_indices)
+    sink.record_absorption(ensemble, dt, absorption_times, absorption_indices)
     ensemble.delete(absorption_indices)
 
 
