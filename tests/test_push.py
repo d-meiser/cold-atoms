@@ -26,7 +26,7 @@ class Harmonic():
     def __init__(self, k):
         self.k = k
 
-    def __call__(self, ensemble):
+    def force(self, ensemble):
         # TODO: There has to be a better way to construct this
         # array.
         accelerations = np.transpose(np.array(

@@ -203,10 +203,10 @@ class RadiationPressure(object):
         gamma -- The atomic decay rate (2\pi / excited state lifetime).
         k -- Wavevector of the resonant laser.
         intensity -- The intensity (in units of the saturation intensity) as a
-                     function of atomic position. This function must be
-                     applicable to an array of atomic positions and it must
-                     return an array of the intensities at the atomic
-                     positions.
+                     function of atomic position. This object must have a
+                     method intensities that, when applied to the atomic
+                     positions returns the intensities at the position of the
+                     atoms.
         detuning -- The detuning of the atomic transition from the laser. Red
                     detuning is negative and blue detuning is positive. The
                     detuning is a function of atomic velocities and may depend
@@ -232,7 +232,7 @@ def drift_kick(dt, ensemble, forces=[], sink=None):
 
         f = np.zeros_like(ensemble.v)
         for force in forces:
-            f += force(ensemble)
+            f += force.force(ensemble)
 
         m = 0.0
         if 'mass' in ensemble.ensemble_properties:
