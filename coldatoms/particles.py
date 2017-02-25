@@ -228,7 +228,6 @@ class RadiationPressure(object):
                 (self.gamma / 2.0)**2 /
                 ((self.gamma / 2.0)**2 * (1.0 + 2.0 * s_of_r) +
                  deltas**2))
-        print('nbars == ', nbars)
         num_ptcls = ensemble.x.shape[0]
 
         # Then we compute the recoil momentum according to momentum diffusion.
