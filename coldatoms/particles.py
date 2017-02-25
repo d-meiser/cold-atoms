@@ -222,11 +222,18 @@ class RadiationPressure(object):
     def force(self, dt, ensemble):
         s_of_r = self.intensity.intensities(ensemble.x)
         deltas = self.detuning.detunings(ensemble.x, ensemble.v)
-        nbars = s_of_r * ((self.gamma / 2.0 / np.pi) *
+
+        # First we compute the expected numbers of scattered photons.
+        nbars = dt * s_of_r * ((self.gamma / 2.0 / np.pi) *
                 (self.gamma / 2.0)**2 /
                 ((self.gamma / 2.0)**2 * (1.0 + 2.0 * s_of_r) +
                  deltas**2))
+        print('nbars == ', nbars)
         num_ptcls = ensemble.x.shape[0]
+
+        # Then we compute the recoil momentum according to momentum diffusion.
+        # We assume that each atom undergoes a random walk in 3D momentum space
+        # with nbar steps and each step of length hbar k.
         recoil_momenta = np.random.normal(size=ensemble.x.shape)
         recoil_momenta *= np.sqrt(nbars / 3.0) * np.linalg.norm(self.hbar_k)
         return nbars * self.hbar_k + recoil_momenta

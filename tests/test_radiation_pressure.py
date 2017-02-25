@@ -27,13 +27,30 @@ detuning = ConstantDetuning(0.0)
 
 
 def test_can_create_resonance_fluorescence():
-    fluorescence = coldatoms.RadiationPressure(1.0e8, hbar_k, intensity, detuning)
+    fluorescence = coldatoms.RadiationPressure(1.0e8,
+                                               hbar_k, intensity, detuning)
 
 
 def test_force_is_non_zero():
-    fluorescence = coldatoms.RadiationPressure(1.0e8, hbar_k, intensity, detuning)
+    fluorescence = coldatoms.RadiationPressure(1.0e8,
+                                               hbar_k, intensity, detuning)
     ensemble = coldatoms.Ensemble()
     # In one millisecond we expect to scatter more than one photon
     f = fluorescence.force(1.0e-3, ensemble)
     assert(np.linalg.norm(f) > np.linalg.norm(hbar_k))
 
+
+def test_force_is_not_unreasonably_large():
+    fluorescence = coldatoms.RadiationPressure(1.0e8,
+                                               hbar_k, intensity, detuning)
+    ensemble = coldatoms.Ensemble()
+    # In one millisecond we expect to scatter no more than s * (gamma/2pi)* dt
+    # photons.
+    expected_number_of_recoils = (intensity.intensity *
+                                  (1.0e8 / 2.0 / np.pi) * 1.0e-3)
+    print('expected_number_of_recoils == ', expected_number_of_recoils)
+    f = fluorescence.force(1.0e-3, ensemble)
+    print(f)
+    print(expected_number_of_recoils * np.linalg.norm(hbar_k))
+    assert(np.linalg.norm(f) <
+           3.0 * expected_number_of_recoils * np.linalg.norm(hbar_k))
