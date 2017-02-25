@@ -10,7 +10,7 @@ class ConstantIntensity(object):
     def __init__(self, intensity):
         self.intensity = intensity
 
-    def __evaluate__(self, x):
+    def intensities(self, x):
         return np.full(x.shape, self.intensity)
 
 
@@ -18,7 +18,7 @@ class ConstantDetuning(object):
     def __init__(self, detuning):
         self.detuning = detuning
 
-    def __evaluate__(self, x, v):
+    def detunings(self, x, v):
         return np.full(x.shape, self.detuning)
 
 
