@@ -26,10 +26,10 @@ class Harmonic():
     def __init__(self, k):
         self.k = k
 
-    def force(self, ensemble):
+    def force(self, dt, ensemble):
         # TODO: There has to be a better way to construct this
         # array.
-        accelerations = np.transpose(np.array(
+        accelerations = dt * np.transpose(np.array(
             [-self.k[i] * ensemble.x[:, i] for i in range(3)]))
         return accelerations
 

@@ -22,8 +22,17 @@ class ConstantDetuning(object):
         return np.full(x.shape, self.detuning)
 
 
+intensity = ConstantIntensity(0.1)
+detuning = ConstantDetuning(0.0)
+
+
 def test_can_create_resonance_fluorescence():
-    intensity = ConstantIntensity(0.1)
-    detuning = ConstantDetuning(0.0)
     fluorescence = coldatoms.RadiationPressure(1.0e8, k, intensity, detuning)
+
+
+def test_force_is_non_zero():
+    fluorescence = coldatoms.RadiationPressure(1.0e8, k, intensity, detuning)
+    ensemble = coldatoms.Ensemble()
+    f = fluorescence.force(1.0e-6, ensemble)
+    assert(np.linalg.norm(f) > 1.0e-12)
 

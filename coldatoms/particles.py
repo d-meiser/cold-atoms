@@ -219,6 +219,9 @@ class RadiationPressure(object):
         self.intensity = intensity
         self.detuning = detuning
 
+    def force(self, dt, ensemble):
+        pass
+
 
 def drift_kick(dt, ensemble, forces=[], sink=None):
     """Drift-Kick-Drift push of particles."""
@@ -232,7 +235,7 @@ def drift_kick(dt, ensemble, forces=[], sink=None):
 
         f = np.zeros_like(ensemble.v)
         for force in forces:
-            f += force.force(ensemble)
+            f += force.force(dt, ensemble)
 
         m = 0.0
         if 'mass' in ensemble.ensemble_properties:
@@ -241,7 +244,7 @@ def drift_kick(dt, ensemble, forces=[], sink=None):
             m = ensemble.particle_properties['mass']
         else:
             raise RuntimeError('To accelerate particles we need a mass ensemble or particle property')
-        ensemble.v += (dt / m) * f
+        ensemble.v +=  f / m
 
         process_sink(0.5 * dt, ensemble, sink)
 
