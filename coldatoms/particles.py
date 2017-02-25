@@ -197,11 +197,11 @@ class RadiationPressure(object):
     cooling.
     """
 
-    def __init__(self, gamma, k, intensity, detuning):
+    def __init__(self, gamma, hbar_k, intensity, detuning):
         """Specification of a RadiationPressure object.
 
         gamma -- The atomic decay rate (2\pi / excited state lifetime).
-        k -- Wavevector of the resonant laser.
+        hbar_k -- Single photon recoil momentum.
         intensity -- The intensity (in units of the saturation intensity) as a
                      function of atomic position. This object must have a
                      method intensities that, when applied to the atomic
@@ -215,12 +215,21 @@ class RadiationPressure(object):
                     values.
         """
         self.gamma = gamma
-        self.k = np.copy(k)
+        self.hbar_k = np.copy(hbar_k)
         self.intensity = intensity
         self.detuning = detuning
 
     def force(self, dt, ensemble):
-        pass
+        s_of_r = self.intensity.intensities(ensemble.x)
+        deltas = self.detuning.detunings(ensemble.x, ensemble.v)
+        nbars = s_of_r * ((self.gamma / 2.0 / np.pi) *
+                (self.gamma / 2.0)**2 /
+                ((self.gamma / 2.0)**2 * (1.0 + 2.0 * s_of_r) +
+                 deltas**2))
+        num_ptcls = ensemble.x.shape[0]
+        recoil_momenta = np.random.normal(size=ensemble.x.shape)
+        recoil_momenta *= np.sqrt(nbars / 3.0) * np.linalg.norm(self.hbar_k)
+        return nbars * self.hbar_k + recoil_momenta
 
 
 def drift_kick(dt, ensemble, forces=[], sink=None):
