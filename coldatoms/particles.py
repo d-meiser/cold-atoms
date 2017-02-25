@@ -234,8 +234,8 @@ class RadiationPressure(object):
         # We assume that each atom undergoes a random walk in 3D momentum space
         # with nbar steps and each step of length hbar k.
         recoil_momenta = np.random.normal(size=ensemble.x.shape)
-        recoil_momenta *= np.sqrt(nbars / 3.0) * np.linalg.norm(self.hbar_k)
-        return nbars * self.hbar_k + recoil_momenta
+        recoil_momenta *= np.sqrt(nbars[:, np.newaxis] / 3.0) * np.linalg.norm(self.hbar_k)
+        return nbars[:, np.newaxis] * self.hbar_k + recoil_momenta
 
 
 def drift_kick(dt, ensemble, forces=[], sink=None):
