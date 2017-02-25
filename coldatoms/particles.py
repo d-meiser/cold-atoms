@@ -180,6 +180,46 @@ def process_sink(dt, ensemble, sink):
     ensemble.delete(absorption_indices)
 
 
+class RadiationPressure(object):
+    """The force experienced by level atoms undergoing resonance fluorescence.
+
+    This class computes the radiation pressure force, both determinstic and
+    fluctuating recoil components, on an atom driven by a monochromatic laser
+    field. The class handles spatial variations in laser intensity and of the
+    atomic transition frequency as in a Zeeman slower. The wavevector of the
+    laser field is assumed constant. RadiationPressure does not deal with
+    attenuation of the laser field and is therefore limited to optically thin
+    samples.
+    An important application of RadiationPressure is to the simulation of
+    Doppler cooling of atoms by combining two red detuned lasers with opposite
+    propagation directions. In the context of laser cooling we are limited to
+    situations of low total saturation and we cannot handle sub-Doppler
+    cooling.
+    """
+
+    def __init__(self, gamma, k, intensity, detuning):
+        """Specification of a RadiationPressure object.
+
+        gamma -- The atomic decay rate (2\pi / excited state lifetime).
+        k -- Wavevector of the resonant laser.
+        intensity -- The intensity (in units of the saturation intensity) as a
+                     function of atomic position. This function must be
+                     applicable to an array of atomic positions and it must
+                     return an array of the intensities at the atomic
+                     positions.
+        detuning -- The detuning of the atomic transition from the laser. Red
+                    detuning is negative and blue detuning is positive. The
+                    detuning is a function of atomic velocities and may depend
+                    on their position. This function must be applicable to x
+                    and v and it should return an array with the detuning
+                    values.
+        """
+        self.gamma = gamma
+        self.k = np.copy(k)
+        self.intensity = intensity
+        self.detuning = detuning
+
+
 def drift_kick(dt, ensemble, forces=[], sink=None):
     """Drift-Kick-Drift push of particles."""
     if len(forces) == 0:
