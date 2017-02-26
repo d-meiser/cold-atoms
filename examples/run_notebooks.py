@@ -28,7 +28,8 @@ def notebook_run(notebook_file):
         return err
 
 
-notebooks = ['./Free particles and ballistic expansion.ipynb',
+notebooks = ['./Doppler Cooling.ipynb',
+             './Free particles and ballistic expansion.ipynb',
              './SourcesAndSinks.ipynb']
 
 
