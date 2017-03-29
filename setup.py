@@ -16,5 +16,7 @@ setup(
     author_email='dmeiser79@gmail.com',
     url='https://github.com/d-meiser/cold-atoms',
     license=license,
-    packages=find_packages(exclude=('tests', 'docs', 'examples'))
+    packages=find_packages(where='src',
+                           exclude=('tests', 'docs', 'examples')),
+    package_dir={'': 'src'}
 )
