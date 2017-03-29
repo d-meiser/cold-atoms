@@ -43,3 +43,13 @@ class test_coulomb(object):
         assert(f[0, 0] > 0)
         assert(f[0, 1] > 0)
         assert(f[0, 2] > 0)
+
+    def test_increasing_the_softcore_radius_decreases_force(self):
+        f = self.coulomb_force.force(1.0e-1, self.ensemble)
+        self.coulomb_force.delta = 1.0
+        f_softcore = self.coulomb_force.force(1.0e-1, self.ensemble)
+        assert(np.linalg.norm(f_softcore) < np.linalg.norm(f))
+
+    def test_can_evaluate_force_for_particles_in_same_position(self):
+        self.ensemble.x[1] = np.zeros(3)
+        f = self.coulomb_force.force(1.0e-1, self.ensemble)
