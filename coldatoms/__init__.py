@@ -8,4 +8,7 @@ from .particles import (
     SinkPlane,
     Source,
     )
+from .coulomb import (
+    CoulombForce
+    )
 
