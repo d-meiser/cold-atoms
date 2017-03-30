@@ -1,5 +1,23 @@
 import numpy as np
 
+def _coulomb_force_ref(positions, q, num_ptcls, delta, k, f):
+    kp = k * q * q
+    for i in range(num_ptcls):
+        for j in range(num_ptcls):
+            r = positions[i] - positions[j]
+            absr = np.sqrt(r.dot(r) + delta)
+            f[i] += kp * r / (absr * absr * absr)
+
+
+def _coulomb_force_ref_per_particle_charges(positions, q, num_ptcls,
+                                            delta, k, f):
+    for i in range(num_ptcls):
+        for j in range(num_ptcls):
+            r = positions[i] - positions[j]
+            absr = np.sqrt(r.dot(r) + delta)
+            f[i] += k * q[i] * q[j] * r / (absr * absr * absr)
+
+
 class CoulombForce(object):
 
     _epsilon0 = 8.854e-12
@@ -23,19 +41,12 @@ class CoulombForce(object):
 
         if 'charge' in ensemble.ensemble_properties:
             q = ensemble.ensemble_properties['charge']
-            kp = self._k * q * q
-            for i in range(ensemble.num_ptcls):
-                for j in range(ensemble.num_ptcls):
-                    r = positions[i] - positions[j]
-                    absr = np.sqrt(r.dot(r) + my_delta_squared)
-                    f[i] += kp * r / (absr * absr * absr)
+            _coulomb_force_ref(positions, q, ensemble.num_ptcls,
+                               my_delta_squared, self._k, f)
         elif 'charge' in ensemble.particle_properties:
             q = ensemble.particle_properties['charge']
-            for i in range(ensemble.num_ptcls):
-                for j in range(ensemble.num_ptcls):
-                    r = positions[i] - positions[j]
-                    absr = np.sqrt(r.dot(r) + my_delta_squared)
-                    f[i] += self._k * q[i] * q[j] * r / (absr * absr * absr)
+            _coulomb_force_ref_per_particle_charges(
+                positions, q, ensemble.num_ptcls, my_delta_squared, self._k, f)
         else:
             raise RuntimeError('Must provide a charge to compute coulomb force')
 
