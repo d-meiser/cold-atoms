@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages, Extension
+from Cython.Build import cythonize
 
 
 with open('README.md') as f:
@@ -7,9 +8,11 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license = f.read()
 
-coldatoms_lib = Extension('coldatoms_lib',
-                          sources=['src/coldatoms/forces.c'],
-                          include_dirs=['./src/coldatoms/'])
+coldatoms_lib = cythonize([Extension(
+    'coldatoms_lib',
+    sources=['src/coldatoms/forces.c'],
+    include_dirs=['./src/coldatoms/']
+    )])
 
 setup(
     name='cold-atoms',
@@ -23,5 +26,5 @@ setup(
     packages=find_packages(where='src',
                            exclude=('tests', 'docs', 'examples')),
     package_dir={'': 'src'},
-    ext_modules=[coldatoms_lib]
+    ext_modules=coldatoms_lib
 )
