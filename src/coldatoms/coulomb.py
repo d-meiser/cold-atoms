@@ -1,4 +1,6 @@
 import numpy as np
+import coldatoms_lib
+
 
 def _coulomb_force_ref(positions, q, num_ptcls, delta, k, f):
     kp = k * q * q
