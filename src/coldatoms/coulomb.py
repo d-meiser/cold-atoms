@@ -25,6 +25,12 @@ class CoulombForce(object):
 
     def __init__(self):
         self.delta = 0.0
+        self.coulomb_force = _coulomb_force_ref
+        self.coulomb_force_per_particle_charges = _coulomb_force_ref_per_particle_charges
+
+    def use_reference_implementations(self):
+        self.coulomb_force = _coulomb_force_ref
+        self.coulomb_force_per_particle_charges = _coulomb_force_ref_per_particle_charges
 
     def force(self, dt, ensemble):
         positions = ensemble.x
@@ -41,11 +47,11 @@ class CoulombForce(object):
 
         if 'charge' in ensemble.ensemble_properties:
             q = ensemble.ensemble_properties['charge']
-            _coulomb_force_ref(positions, q, ensemble.num_ptcls,
+            self.coulomb_force(positions, q, ensemble.num_ptcls,
                                my_delta_squared, self._k, f)
         elif 'charge' in ensemble.particle_properties:
             q = ensemble.particle_properties['charge']
-            _coulomb_force_ref_per_particle_charges(
+            self.coulomb_force_per_particle_charges(
                 positions, q, ensemble.num_ptcls, my_delta_squared, self._k, f)
         else:
             raise RuntimeError('Must provide a charge to compute coulomb force')
