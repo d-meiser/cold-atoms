@@ -14,7 +14,7 @@ develop:
 	python setup.py develop
 
 install:
-	pip install .
+	pip install --verbose .
 
 .PHONY: init test
 
