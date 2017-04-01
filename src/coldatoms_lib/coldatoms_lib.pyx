@@ -31,3 +31,4 @@ def coulomb_force_per_particle_charge(
 
     ccoldatoms_lib.coulomb_force_per_particle_charges(
         &positions[0, 0], &charges[0], num_ptcls, delta, k, &forces[0, 0])
+

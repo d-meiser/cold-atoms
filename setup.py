@@ -21,7 +21,7 @@ packages = find_packages(where='src',
                          exclude=('tests', 'docs', 'examples'))
 
 setup(
-    name='cold-atoms',
+    name='cold_atoms',
     version='0.0.0',
     description='Collection of python tools for cold atoms simulations',
     long_description=readme,
