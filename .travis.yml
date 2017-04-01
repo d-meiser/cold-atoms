@@ -6,7 +6,7 @@ install:
   - pip install --upgrade pip
   - pip install coveralls
   - make init
-  - make install
+  - make develop
 script:
   - make test
   - make run-notebooks
