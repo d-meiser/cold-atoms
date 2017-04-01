@@ -1,4 +1,4 @@
-from .context import coldatoms
+import coldatoms
 import numpy as np
 
 speed_of_light = 3.0e8
