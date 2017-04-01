@@ -9,10 +9,11 @@ with open('LICENSE') as f:
     license = f.read()
 
 coldatoms_lib = cythonize([Extension(
-    'coldatoms_lib',
+    'coldatoms_lib.coldatoms_lib',
     sources=['src/coldatoms_lib/forces.c',
              'src/coldatoms_lib/coldatoms_lib.pyx'],
-    include_dirs=['./src/coldatoms_lib/']
+    include_dirs=['./src/coldatoms_lib/'],
+    extra_compile_args=['-std=c99']
     )])
 
 setup(
