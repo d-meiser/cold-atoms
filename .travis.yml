@@ -11,11 +11,7 @@ install:
 script:
   - make test
   - make run-notebooks
-  - make install
-  - cp -r test /tmp
-  - cd /tmp/test
-  - nosetests
-  - cd -
+  - sh ci/test_installation.sh
 after_success:
   - coveralls --rcfile=.coveragerc
 
