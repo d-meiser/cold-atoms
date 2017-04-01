@@ -1,4 +1,6 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+from Cython.Build import cythonize
+import numpy
 
 
 with open('README.md') as f:
@@ -7,8 +9,19 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license = f.read()
 
+coldatoms_lib = cythonize([Extension(
+    'coldatoms_lib.coldatoms_lib',
+    sources=['src/coldatoms_lib/forces.c',
+             'src/coldatoms_lib/coldatoms_lib.pyx'],
+    include_dirs=['./src/coldatoms_lib/', numpy.get_include()],
+    extra_compile_args=['-std=c99']
+    )])
+
+packages = find_packages(where='src',
+                         exclude=('tests', 'docs', 'examples'))
+
 setup(
-    name='cold-atoms',
+    name='cold_atoms',
     version='0.0.0',
     description='Collection of python tools for cold atoms simulations',
     long_description=readme,
@@ -16,7 +29,7 @@ setup(
     author_email='dmeiser79@gmail.com',
     url='https://github.com/d-meiser/cold-atoms',
     license=license,
-    packages=find_packages(where='src',
-                           exclude=('tests', 'docs', 'examples')),
-    package_dir={'': 'src'}
+    packages=packages,
+    package_dir={'': 'src'},
+    ext_modules=coldatoms_lib
 )

@@ -3,4 +3,5 @@ matplotlib
 nose
 sphinx
 jupyter
+cython
 

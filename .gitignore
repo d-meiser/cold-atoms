@@ -1,3 +1,8 @@
+# Vim swap files
+*.swp
+
+src/coldatoms_lib/coldatoms_lib.c
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

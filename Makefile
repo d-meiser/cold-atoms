@@ -7,11 +7,14 @@ test:
 run-notebooks:
 	cd examples && python run_notebooks.py && cd .
 
+build:
+	python setup.py build
+
 develop:
 	python setup.py develop
 
 install:
-	pip install .
+	pip install --verbose .
 
 .PHONY: init test
 
