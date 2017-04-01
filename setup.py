@@ -10,9 +10,9 @@ with open('LICENSE') as f:
 
 coldatoms_lib = cythonize([Extension(
     'coldatoms_lib',
-    sources=['src/coldatoms/forces.c',
-             'src/coldatoms/coldatoms_lib.pyx'],
-    include_dirs=['./src/coldatoms/']
+    sources=['src/coldatoms_lib/forces.c',
+             'src/coldatoms_lib/coldatoms_lib.pyx'],
+    include_dirs=['./src/coldatoms_lib/']
     )])
 
 setup(

@@ -27,8 +27,8 @@ class CoulombForce(object):
 
     def __init__(self):
         self.delta = 0.0
-        self.coulomb_force = _coulomb_force_ref
-        self.coulomb_force_per_particle_charges = _coulomb_force_ref_per_particle_charges
+        self.coulomb_force = coldatoms_lib.coulomb_force
+        self.coulomb_force_per_particle_charges = coldatoms_lib.coulomb_force_per_particle_charge
 
     def use_reference_implementations(self):
         self.coulomb_force = _coulomb_force_ref
