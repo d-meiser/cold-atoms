@@ -1,7 +1,13 @@
 import cython
 import numpy as np
 cimport numpy as np
-cimport ccoldatoms_lib
+
+
+cdef extern from "forces.h":
+    void coulomb_force(const double* positions, double charge,
+                       int num_ptcls, double delta, double k, double* forces);
+    void coulomb_force_per_particle_charges(const double* positions, double* charge,
+                       int num_ptcls, double delta, double k, double* forces);
 
 
 @cython.boundscheck(False)
