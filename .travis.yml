@@ -8,10 +8,14 @@ install:
   - make init
   - make build
   - make develop
-  - make install
 script:
   - make test
   - make run-notebooks
+  - make install
+  - cp -r test /tmp
+  - cd /tmp/test
+  - nosetests
+  - cd -
 after_success:
   - coveralls --rcfile=.coveragerc
 
