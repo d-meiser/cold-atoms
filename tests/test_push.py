@@ -1,4 +1,4 @@
-from .context import coldatoms
+import coldatoms
 import numpy as np
 import math
 from nose.tools import *
