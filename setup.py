@@ -17,6 +17,9 @@ coldatoms_lib = cythonize([Extension(
     extra_compile_args=['-std=c99']
     )])
 
+packages = find_packages(where='src',
+                         exclude=('tests', 'docs', 'examples'))
+
 setup(
     name='cold-atoms',
     version='0.0.0',
@@ -26,8 +29,7 @@ setup(
     author_email='dmeiser79@gmail.com',
     url='https://github.com/d-meiser/cold-atoms',
     license=license,
-    packages=find_packages(where='src',
-                           exclude=('tests', 'docs', 'examples')),
+    packages=packages,
     package_dir={'': 'src'},
     ext_modules=coldatoms_lib
 )
