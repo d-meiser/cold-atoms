@@ -5,7 +5,7 @@ test:
 	nosetests --with-coverage --cover-package=coldatoms --logging-level=INFO
 
 run-notebooks:
-	cd examples && python run_notebooks.py && cd .
+	cd examples && python run_notebooks.py && cd ..
 
 build:
 	python setup.py build
