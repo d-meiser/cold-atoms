@@ -219,7 +219,7 @@ class RadiationPressure(object):
         self.intensity = intensity
         self.detuning = detuning
 
-    def force(self, dt, ensemble):
+    def force(self, dt, ensemble, f):
         s_of_r = self.intensity.intensities(ensemble.x)
         deltas = self.detuning.detunings(ensemble.x, ensemble.v)
 
@@ -235,7 +235,7 @@ class RadiationPressure(object):
         # with nbar steps and each step of length hbar k.
         recoil_momenta = np.random.normal(size=ensemble.x.shape)
         recoil_momenta *= np.sqrt(nbars[:, np.newaxis] / 3.0) * np.linalg.norm(self.hbar_k)
-        return nbars[:, np.newaxis] * self.hbar_k + recoil_momenta
+        f += nbars[:, np.newaxis] * self.hbar_k + recoil_momenta
 
 
 def drift_kick(dt, ensemble, forces=[], sink=None):
@@ -250,7 +250,7 @@ def drift_kick(dt, ensemble, forces=[], sink=None):
 
         f = np.zeros_like(ensemble.v)
         for force in forces:
-            f += force.force(dt, ensemble)
+            force.force(dt, ensemble, f)
 
         m = 0.0
         if 'mass' in ensemble.ensemble_properties:
