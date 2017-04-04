@@ -36,9 +36,8 @@ class CoulombForce(object):
         self.coulomb_force = _coulomb_force_ref
         self.coulomb_force_per_particle_charges = _coulomb_force_ref_per_particle_charges
 
-    def force(self, dt, ensemble):
+    def force(self, dt, ensemble, f):
         positions = ensemble.x
-        f = np.zeros([ensemble.num_ptcls, 3])
 
         # We guard against the case where particles are in the same
         # location by adding a small cut off parameter to the
