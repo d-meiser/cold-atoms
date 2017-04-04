@@ -239,7 +239,16 @@ class RadiationPressure(object):
 
 
 def drift_kick(dt, ensemble, forces=[], sink=None):
-    """Drift-Kick-Drift push of particles."""
+    """Drift-Kick-Drift push of particles.
+
+    dt --       Time step size.
+    ensemble -- The ensemble to advance.
+    forces --   Forces acting on the ensemble. Each entry in this list must have
+                a method force(dt, ensemble, f) that adds the force
+                corresponding to the entry to f.
+    sink --     The particle sink.
+    
+    """
     if len(forces) == 0:
         process_sink(dt, ensemble, sink)
         ensemble.x += dt * ensemble.v
