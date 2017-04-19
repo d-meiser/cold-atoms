@@ -1,5 +1,6 @@
 #include <forces.h>
 #include <math.h>
+#include <assert.h>
 
 
 static double distance(const double *r, double delta)
@@ -176,25 +177,25 @@ static void coulomb_force_cleanup(const double * restrict positions,
 	// Right leftovers.
 	for (int i = 0; i < n0; ++i) {
 		for (int j = n0; j < num_ptcls; ++j) {
-			const double *r1 = positions + j;
-			double r[3];
-			for (int m = 0; m < 3; ++m) {
+			const double *r1 = positions + NUM_COMPONENTS * j;
+			double r[NUM_COMPONENTS];
+			for (int m = 0; m < NUM_COMPONENTS; ++m) {
 				r[m] = r0[m] - r1[m];
 			}
 			double dist = distance(r, delta);
 			double dist_cubed = dist * dist * dist;
-			for (int m = 0; m < 3; ++m) {
+			for (int m = 0; m < NUM_COMPONENTS; ++m) {
 				forces[m] += k * r[m] / dist_cubed;
 			}
 		}
-		r0 += 3;
-		forces += 3;
+		r0 += NUM_COMPONENTS;
+		forces += NUM_COMPONENTS;
 	}
 
 	// Bottom leftovers.
 	for (int i = n0; i < num_ptcls; ++i) {
 		for (int j = 0; j < num_ptcls; ++j) {
-			const double *r1 = positions + j;
+			const double *r1 = positions + j * NUM_COMPONENTS;
 			double r[3];
 			for (int m = 0; m < 3; ++m) {
 				r[m] = r0[m] - r1[m];
@@ -205,8 +206,8 @@ static void coulomb_force_cleanup(const double * restrict positions,
 				forces[m] += k * r[m] / dist_cubed;
 			}
 		}
-		r0 += 3;
-		forces += 3;
+		r0 += NUM_COMPONENTS;
+		forces += NUM_COMPONENTS;
 	}
 }
 
