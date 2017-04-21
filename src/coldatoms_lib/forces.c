@@ -1,6 +1,7 @@
 #include <forces.h>
 #include <math.h>
 #include <assert.h>
+#include <stdio.h>
 
 
 static double distance(const double *r, double delta)
@@ -88,7 +89,6 @@ static void transpose(
 }
 
 
-
 #define CHUNK_SIZE 32
 #define NUM_COMPONENTS 3
 #define ALIGN __align
@@ -105,6 +105,9 @@ static void distance_chunked(const double *restrict r, double delta, double
 			           r[j * CHUNK_SIZE + i];
 		}
 	}
+	for (int i = 0; i < CHUNK_SIZE; ++i) {
+		dist[i] = sqrt(dist[i]);
+	}
 }
 
 static void accumulate_force(const double *restrict x0,
@@ -117,19 +120,19 @@ static void accumulate_force(const double *restrict x0,
 			for (int j = 0; j < CHUNK_SIZE; ++j) {
 				r[m][j] =
 					x0[m * CHUNK_SIZE + i] -
-					x1[m * CHUNK_SIZE + i];
+					x1[m * CHUNK_SIZE + j];
 			}
 		}
 
 		double dist[CHUNK_SIZE];
 		distance_chunked(&r[0][0], delta, &dist[0]);
 		for (int j = 0; j < CHUNK_SIZE; ++j) {
-			dist[j] = dist[j] * dist[j] * dist[j] ;
+			dist[j] = dist[j] * dist[j] * dist[j];
 		}
 
 		for (int m = 0; m < NUM_COMPONENTS; ++m) {
 			for (int j = 0; j < CHUNK_SIZE; ++j) {
-				f[m * CHUNK_SIZE + j] +=
+				f[m * CHUNK_SIZE + i] +=
 					k * r[m][j] / dist[j];
 			}
 		}
@@ -160,7 +163,7 @@ static void coulomb_force_chunked(const double * restrict positions,
 			accumulate_force(&x0[0][0], &x1[0][0], &f[0][0], k,
 					 delta);
 		}
-		transpose(&f[0][0], NUM_COMPONENTS,CHUNK_SIZE,
+		transpose(&f[0][0], NUM_COMPONENTS, CHUNK_SIZE,
 			  forces + i * NUM_COMPONENTS * CHUNK_SIZE);
 	}
 }
