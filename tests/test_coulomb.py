@@ -85,3 +85,16 @@ class test_coulomb(object):
         normalization = np.linalg.norm(f_ref) + np.linalg.norm(f)
         assert(np.linalg.norm(f - f_ref) < 1.0e-9 * normalization)
 
+    def test_compare_with_reference_impl_large_num_ptcls(self):
+        self.ensemble.x = np.zeros([100, 3])
+        m, n = self.ensemble.x.shape
+        self.ensemble.x = np.random.rand(m, n)
+        self.f = np.zeros_like(self.ensemble.x)
+        self.coulomb_force.force(1.0e-2, self.ensemble, self.f)
+        f = np.copy(self.f)
+        self.f.fill(0.0)
+        self.coulomb_force.use_reference_implementations()
+        self.coulomb_force.force(1.0e-2, self.ensemble, self.f)
+        f_ref = np.copy(self.f)
+        normalization = np.linalg.norm(f_ref) + np.linalg.norm(f)
+        assert(np.linalg.norm(f - f_ref) < 1.0e-9 * normalization)
