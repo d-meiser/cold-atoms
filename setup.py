@@ -15,13 +15,15 @@ with open('LICENSE') as f:
 # road this will have to be special cased for the different toolchains. Also,
 # the ISA is hardwired for now.
 extra_compile_args = ['-std=c99', '-ffast-math', '-ftree-vectorize', '-msse4']
+extra_link_args = []
 
 coldatoms_lib = cythonize([Extension(
     'coldatoms_lib.coldatoms_lib',
     sources=['src/coldatoms_lib/forces.c',
              'src/coldatoms_lib/coldatoms_lib.pyx'],
     include_dirs=['./src/coldatoms_lib/', numpy.get_include()],
-    extra_compile_args=extra_compile_args
+    extra_compile_args=extra_compile_args,
+    extra_link_args=extra_link_args
     )])
 
 packages = find_packages(where='src',
