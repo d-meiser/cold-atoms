@@ -31,7 +31,8 @@ def notebook_run(notebook_file):
 notebooks = ['./Doppler Cooling.ipynb',
              './Free particles and ballistic expansion.ipynb',
              './SourcesAndSinks.ipynb',
-             './Optimization of Coulomb force evaluation.ipynb']
+             './Optimization of Coulomb force evaluation.ipynb',
+             './Ions in Penning trap.ipynb']
 
 
 if __name__ == '__main__':
