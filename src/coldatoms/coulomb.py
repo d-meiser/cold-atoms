@@ -2,8 +2,8 @@ import numpy as np
 import coldatoms_lib
 
 
-def _coulomb_force_ref(positions, q, delta, k, f):
-    kp = k * q * q
+def _coulomb_force_ref(positions, q, dt, delta, k, f):
+    kp = dt * k * q * q
     num_ptcls = positions.shape[0]
     for i in range(num_ptcls):
         for j in range(num_ptcls):
@@ -12,9 +12,10 @@ def _coulomb_force_ref(positions, q, delta, k, f):
             f[i] += kp * r / (absr * absr * absr)
 
 
-def _coulomb_force_ref_per_particle_charges(positions, q,
+def _coulomb_force_ref_per_particle_charges(positions, q, dt,
                                             delta, k, f):
     num_ptcls = positions.shape[0]
+    k *= dt
     for i in range(num_ptcls):
         for j in range(num_ptcls):
             r = positions[i] - positions[j]
@@ -50,14 +51,12 @@ class CoulombForce(object):
 
         if 'charge' in ensemble.ensemble_properties:
             q = ensemble.ensemble_properties['charge']
-            self.coulomb_force(positions, q,  
+            self.coulomb_force(positions, q, dt,
                                my_delta_squared, self._k, f)
         elif 'charge' in ensemble.particle_properties:
             q = ensemble.particle_properties['charge']
             self.coulomb_force_per_particle_charges(
-                positions, q, my_delta_squared, self._k, f)
+                positions, q, dt, my_delta_squared, self._k, f)
         else:
             raise RuntimeError('Must provide a charge to compute coulomb force')
-
-        return f
 

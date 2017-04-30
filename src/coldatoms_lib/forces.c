@@ -14,21 +14,24 @@ static double distance(const double *r, double delta)
 }
 
 static void coulomb_force_chunked(const double *positions, double charge,
+				  double dt,
 				  int num_ptcls, double delta, double k,
 				  double *forces);
 static void coulomb_force_cleanup(const double *positions, double charge,
+				  double dt,
 				  int num_ptcls, double delta, double k,
 				  double *forces);
 
-void coulomb_force(const double *positions, double charge, int num_ptcls,
+void coulomb_force(const double *positions, double charge, double dt,
+int num_ptcls,
 		   double delta, double k, double *forces)
 {
-	coulomb_force_chunked(positions, charge, num_ptcls, delta, k, forces);
-	coulomb_force_cleanup(positions, charge, num_ptcls, delta, k, forces);
+	coulomb_force_chunked(positions, charge, dt, num_ptcls, delta, k, forces);
+	coulomb_force_cleanup(positions, charge, dt, num_ptcls, delta, k, forces);
 }
 
 void coulomb_force_per_particle_charges(const double *positions,
-					const double *charge, int num_ptcls,
+					const double *charge, double dt, int num_ptcls,
 					double delta, double k, double *forces)
 {
 	const double *r0 = positions;
@@ -41,7 +44,7 @@ void coulomb_force_per_particle_charges(const double *positions,
 			}
 			double dist = distance(r, delta);
 			double dist_cubed = dist * dist * dist;
-			double kp = k * charge[i] * charge[j];
+			double kp = dt * k * charge[i] * charge[j];
 			for (int m = 0; m < 3; ++m) {
 				forces[m] += kp * r[m] / dist_cubed;
 			}
@@ -111,12 +114,12 @@ static void accumulate_force(const double *restrict x0,
 }
 
 static void coulomb_force_chunked(const double *restrict positions,
-				  double charge, int num_ptcls, double delta,
+				  double charge, double dt, int num_ptcls, double delta,
 				  double k, double *restrict forces)
 {
 	int num_chunks = num_ptcls / CHUNK_SIZE;
 
-	k *= charge * charge;
+	k *= dt * charge * charge;
 
 	for (int i = 0; i < num_chunks; ++i) {
 		double x0[NUM_COMPONENTS][CHUNK_SIZE];
@@ -136,12 +139,12 @@ static void coulomb_force_chunked(const double *restrict positions,
 }
 
 static void coulomb_force_cleanup(const double *restrict positions,
-				  double charge, int num_ptcls, double delta,
+				  double charge, double dt, int num_ptcls, double delta,
 				  double k, double *restrict forces)
 {
 	int num_chunks = num_ptcls / CHUNK_SIZE;
 	int n0 = num_chunks * CHUNK_SIZE;
-	k *= charge * charge;
+	k *= dt * charge * charge;
 	const double *r0 = positions;
 
 	// Right leftovers.
