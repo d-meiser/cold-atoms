@@ -1,7 +1,8 @@
 import numpy as np
+import coldatoms_lib
 
 
-def bend_kick_update(dt, omegaB, x, v):
+def bend_kick_update_reference_impl(dt, omegaB, x, v):
     theta = dt * omegaB
     cosTheta = np.cos(theta)
     sinTheta = np.sin(theta)
@@ -16,7 +17,7 @@ def bend_kick_update(dt, omegaB, x, v):
     v[:, 0] = vx
 
 
-def bend_kick(dt, Bz, ensemble, forces):
+def bend_kick(dt, Bz, ensemble, forces, reference_impl=False):
     """Integrator for particle motion in a constant magnetic field"""
 
     if 'charge' in ensemble.ensemble_properties:
@@ -35,12 +36,17 @@ def bend_kick(dt, Bz, ensemble, forces):
 
     omegaB = Bz * q / m
 
-    if len(forces) == 0:
-        bend_kick_update(dt, omegaB, ensemble.x, ensemble.v)
+    if reference_impl:
+         updater = bend_kick_update_reference_impl
     else:
-        bend_kick_update(0.5 * dt, omegaB, ensemble.x, ensemble.v)
+         updater = coldatoms_lib.bend_kick_update
+
+    if len(forces) == 0:
+        updater(dt, omegaB, ensemble.x, ensemble.v)
+    else:
+        updater(0.5 * dt, omegaB, ensemble.x, ensemble.v)
         f = np.zeros_like(ensemble.v)
         for force in forces:
             force.force(dt, ensemble, f)
         ensemble.v *= f / m
-        bend_kick_update(0.5 * dt, omegaB, ensemble.x, ensemble.v)
+        updater(0.5 * dt, omegaB, ensemble.x, ensemble.v)

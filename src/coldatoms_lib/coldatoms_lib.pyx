@@ -32,3 +32,38 @@ def coulomb_force_per_particle_charge(
     ccoldatoms_lib.coulomb_force_per_particle_charges(
         &positions[0, 0], &charges[0], dt, num_ptcls, delta, k, &forces[0, 0])
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def bend_kick_update_scalar(
+    double dt, double omegaB,
+    np.ndarray[double, ndim=2, mode="c"] x not None,
+    np.ndarray[double, ndim=2, mode="c"] v not None):
+
+    cdef num_ptcls
+    num_ptcls = x.shape[0]
+
+    ccoldatoms_lib.bend_kick_update_scalar(
+        dt, omegaB, num_ptcls, &x[0, 0], &v[0, 0])
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def bend_kick_update_vector(
+    double dt,
+    np.ndarray[double, ndim=1, mode="c"] omegaB,
+    np.ndarray[double, ndim=2, mode="c"] x not None,
+    np.ndarray[double, ndim=2, mode="c"] v not None):
+
+    cdef num_ptcls
+    num_ptcls = x.shape[0]
+
+    ccoldatoms_lib.bend_kick_update_vector(
+        dt, &omegaB[0], num_ptcls, &x[0, 0], &v[0, 0])
+
+
+def bend_kick_update(dt, omegaB, x, v):
+    if np.isscalar(omegaB):
+        bend_kick_update_scalar(dt, omegaB, x, v)
+    else:
+        bend_kick_update_vector(dt, omegaB, x, v)
