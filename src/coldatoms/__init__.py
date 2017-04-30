@@ -11,4 +11,7 @@ from .particles import (
 from .coulomb import (
     CoulombForce
     )
+from .bend_kick import (
+    bend_kick
+)
 
