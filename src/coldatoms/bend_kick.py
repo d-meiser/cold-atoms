@@ -48,5 +48,5 @@ def bend_kick(dt, Bz, ensemble, forces, reference_impl=False):
         f = np.zeros_like(ensemble.v)
         for force in forces:
             force.force(dt, ensemble, f)
-        ensemble.v *= f / m
+        ensemble.v += f / m
         updater(0.5 * dt, omegaB, ensemble.x, ensemble.v)
