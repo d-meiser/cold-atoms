@@ -1,6 +1,11 @@
 #include <bend_kick_updater.h>
 #include <math.h>
 
+struct Vec3 {
+	double x;
+	double y;
+	double z;
+};
 
 void bend_kick_update_scalar(double dt, double omegaB,
 	int num_ptcls,
@@ -10,23 +15,18 @@ void bend_kick_update_scalar(double dt, double omegaB,
 	double cosTheta = cos(theta);
 	double sinTheta = sin(theta);
 
-	double *x0 = &x[0 * num_ptcls];
-	double *x1 = &x[1 * num_ptcls];
-	double *x2 = &x[2 * num_ptcls];
-
-	double *v0 = &v[0 * num_ptcls];
-	double *v1 = &v[1 * num_ptcls];
-	double *v2 = &v[2 * num_ptcls];
+	struct Vec3 *pos = (struct Vec3 *)x;
+	struct Vec3 *vel = (struct Vec3 *)v;
 
 	for (int i = 0; i < num_ptcls; ++i) {
-		x0[i] += (sinTheta          * v0[i] + (cosTheta - 1.0) * v1[i]) / omegaB;
-		x1[i] += (-(cosTheta - 1.0) * v0[i] + sinTheta         * v1[i]) / omegaB;
-		x2[i] += dt * v2[i];
+		pos[i].x += (sinTheta * vel[i].x + (cosTheta - 1.0) * vel[i].y) / omegaB;
+		pos[i].y += (-(cosTheta - 1.0) * vel[i].x + sinTheta * vel[i].y) / omegaB;
+		pos[i].z += dt * vel[i].z;
 
-		double vx_tmp = cosTheta * v0[i] - sinTheta * v1[i];
-		double vy_tmp = sinTheta * v0[i] + cosTheta * v1[i];
-		v0[i] = vx_tmp;
-		v1[i] = vy_tmp;
+		double vx_tmp = cosTheta * vel[i].x - sinTheta * vel[i].y;
+		double vy_tmp = sinTheta * vel[i].x + cosTheta * vel[i].y;
+		vel[i].x = vx_tmp;
+		vel[i].y = vy_tmp;
 	}
 }
 
@@ -34,27 +34,22 @@ void bend_kick_update_vector(double dt, const double * restrict omegaB,
 	int num_ptcls,
 	double *restrict x, double * restrict v)
 {
-	double *x0 = &x[0 * num_ptcls];
-	double *x1 = &x[1 * num_ptcls];
-	double *x2 = &x[2 * num_ptcls];
-
-	double *v0 = &v[0 * num_ptcls];
-	double *v1 = &v[1 * num_ptcls];
-	double *v2 = &v[2 * num_ptcls];
+	struct Vec3 *pos = (struct Vec3 *)x;
+	struct Vec3 *vel = (struct Vec3 *)v;
 
 	for (int i = 0; i < num_ptcls; ++i) {
 		double theta = dt * omegaB[i];
 		double cosTheta = cos(theta);
 		double sinTheta = sin(theta);
 
-		x0[i] += (sinTheta * v0[i] + (cosTheta - 1.0) * v1[i]) / omegaB[i];
-		x1[i] += (-(cosTheta - 1.0) * v0[i] + sinTheta * v0[i]) / omegaB[i];
-		x2[i] += dt * v2[i];
+		pos[i].x += (sinTheta * vel[i].x + (cosTheta - 1.0) * vel[i].y) / omegaB[i];
+		pos[i].y += (-(cosTheta - 1.0) * vel[i].x + sinTheta * vel[i].y) / omegaB[i];
+		pos[i].z += dt * vel[i].z;
 
-		double vx_tmp = cosTheta * v0[i] - sinTheta * v1[i];
-		double vy_tmp = sinTheta * v0[i] + cosTheta * v1[i];
-		v0[i] = vx_tmp;
-		v1[i] = vy_tmp;
+		double vx_tmp = cosTheta * vel[i].x - sinTheta * vel[i].y;
+		double vy_tmp = sinTheta * vel[i].x + cosTheta * vel[i].y;
+		vel[i].x = vx_tmp;
+		vel[i].y = vy_tmp;
 	}
 }
 
