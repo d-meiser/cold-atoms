@@ -244,8 +244,8 @@ def drift_kick(dt, ensemble, forces=[], sink=None):
     dt --       Time step size.
     ensemble -- The ensemble to advance.
     forces --   Forces acting on the ensemble. Each entry in this list must have
-                a method force(dt, ensemble, f) that adds the force
-                corresponding to the entry to f.
+                a method force(dt, ensemble, f) that adds the force integrated
+                over dt to f.
     sink --     The particle sink.
     
     """
