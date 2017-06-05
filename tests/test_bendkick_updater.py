@@ -1,5 +1,6 @@
 import coldatoms
 import numpy as np
+from nose.tools import *
 
 
 class test_bendkickupdater(object):
@@ -142,3 +143,13 @@ class test_bendkickupdater(object):
 
         assert(np.linalg.norm(final_positions - final_positions_ref) < 1.0e-6)
         assert(np.linalg.norm(final_velocities - final_velocities_ref) < 1.0e-6)
+
+    @raises(Exception)
+    def test_must_provide_mass(self):
+        self.ensemble.ensemble_properties.pop('mass', None)
+        coldatoms.bend_kick(1.0, 1.0, self.ensemble, [])
+
+    @raises(Exception)
+    def test_must_provide_charge(self):
+        self.ensemble.ensemble_properties.pop('charge', None)
+        coldatoms.bend_kick(1.0, 1.0, self.ensemble, [])
