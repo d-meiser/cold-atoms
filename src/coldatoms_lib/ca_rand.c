@@ -1,6 +1,6 @@
-#include <rand.h>
+#include <ca_rand.h>
 
-#if define(HAVE_MKL)
+#if defined(HAVE_MKL)
 #elif defined(HAVE_SPRNG)
 #else
 
@@ -31,7 +31,7 @@ void ca_rand_seed(CARandCtx ctx, int seed)
 {
 }
 
-double ca_rand(CARandCtx ctx, int n, double* x)
+void ca_rand(CARandCtx ctx, int n, double* x)
 {
 	static const double max = RAND_MAX;
 	for (int i = 0; i < n; ++i) {
