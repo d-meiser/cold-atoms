@@ -100,3 +100,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+# Third party libs
+sprng*
