@@ -70,5 +70,7 @@ def bend_kick_update(dt, omegaB, x, v):
 
 
 class Rng(object):
-    pass
+
+    def fill(self, array):
+        array.fill(0.5)
 
