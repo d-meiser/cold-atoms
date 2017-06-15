@@ -13,3 +13,16 @@ cdef extern from "bend_kick_updater.h":
     void bend_kick_update_vector(double dt, const double *omegaB,
         int num_ptcls,
         double *x, double *v);
+
+cdef extern from "ca_rand.h":
+    struct CARandCtx:
+        pass
+    void ca_rand_init();
+    void ca_rand_finalize();
+    CARandCtx* ca_rand_create();
+    void ca_rand_destroy(CARandCtx** ctx);
+    void ca_rand_seed(CARandCtx* ctx, int seed);
+    void ca_rand(CARandCtx* ctx, int n, double* x);
+    void ca_irand(CARandCtx* ctx, int n, int* a);
+    int ca_rand_max();
+

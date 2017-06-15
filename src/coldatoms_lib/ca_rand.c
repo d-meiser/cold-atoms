@@ -17,21 +17,21 @@ void ca_rand_finalize()
 {
 }
 
-CARandCtx ca_rand_create()
+struct CARandCtx* ca_rand_create()
 {
 	return NULL;
 }
 
-void ca_rand_destroy(CARandCtx* ctx)
+void ca_rand_destroy(struct CARandCtx** ctx)
 {
 	*ctx = NULL;
 }
 
-void ca_rand_seed(CARandCtx ctx, int seed)
+void ca_rand_seed(struct CARandCtx* ctx, int seed)
 {
 }
 
-void ca_rand(CARandCtx ctx, int n, double* x)
+void ca_rand(struct CARandCtx* ctx, int n, double* x)
 {
 	static const double max = RAND_MAX;
 	for (int i = 0; i < n; ++i) {
@@ -39,7 +39,7 @@ void ca_rand(CARandCtx ctx, int n, double* x)
 	}
 }
 
-void ca_irand(CARandCtx ctx, int n, int* a)
+void ca_irand(struct CARandCtx* ctx, int n, int* a)
 {
 	for (int i = 0; i < n; ++i) {
 		a[i] = rand();
