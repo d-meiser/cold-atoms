@@ -21,6 +21,7 @@ coldatoms_lib = cythonize([Extension(
     'coldatoms_lib.coldatoms_lib',
     sources=['src/coldatoms_lib/bend_kick_updater.c',
              'src/coldatoms_lib/forces.c',
+             'src/coldatoms_lib/ca_rand.c',
              'src/coldatoms_lib/coldatoms_lib.pyx'],
     include_dirs=['./src/coldatoms_lib/', numpy.get_include()],
     extra_compile_args=extra_compile_args,
