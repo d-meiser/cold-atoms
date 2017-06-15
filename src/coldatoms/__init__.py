@@ -14,4 +14,7 @@ from .coulomb import (
 from .bend_kick import (
     bend_kick
 )
+from coldatoms_lib import (
+    Rng
+)
 

@@ -67,3 +67,8 @@ def bend_kick_update(dt, omegaB, x, v):
         bend_kick_update_scalar(dt, omegaB, x, v)
     else:
         bend_kick_update_vector(dt, omegaB, x, v)
+
+
+class Rng(object):
+    pass
+
