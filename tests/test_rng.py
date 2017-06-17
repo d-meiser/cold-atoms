@@ -15,4 +15,5 @@ class test_rng(object):
         self.rng.fill(nums)
         for a in nums:
             assert(a >= 0.0 and a < 1.0)
+        assert(np.std(nums) > 1.0e-9)
 

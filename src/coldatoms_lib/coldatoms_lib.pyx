@@ -2,6 +2,7 @@ import cython
 import numpy as np
 cimport numpy as np
 cimport ccoldatoms_lib
+import atexit
 
 
 @cython.boundscheck(False)
@@ -69,8 +70,23 @@ def bend_kick_update(dt, omegaB, x, v):
         bend_kick_update_vector(dt, omegaB, x, v)
 
 
-class Rng(object):
+cdef class Rng(object):
 
-    def fill(self, array):
-        array.fill(0.5)
+    cdef ccoldatoms_lib.CARandCtx* _generator
+
+    def __cinit__(self, seed=None):
+        self._generator = ccoldatoms_lib.ca_rand_create()
+        if seed is not None:
+            ccoldatoms_lib.ca_rand_seed(self._generator, seed)
+
+    def __dealloc__(self):
+        ccoldatoms_lib.ca_rand_destroy(&self._generator)
+
+    def seed(self, unsigned int seed):
+        ccoldatoms_lib.ca_rand_seed(self._generator, seed)
+
+    def fill(self, np.ndarray[double, mode="c"] array):
+        cdef int n = array.size
+        cdef double *buffer = <double *>array.data
+        ccoldatoms_lib.ca_rand(self._generator, n, buffer)
 
