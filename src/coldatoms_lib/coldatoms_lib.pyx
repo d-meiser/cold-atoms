@@ -90,3 +90,9 @@ cdef class Rng(object):
         cdef double *buffer = <double *>array.data
         ccoldatoms_lib.ca_rand(self._generator, n, buffer)
 
+    def fill_gaussian(self, double mean, double std, np.ndarray[double, mode="c"] array):
+        cdef int n = array.size
+        cdef double *buffer = <double *>array.data
+        ccoldatoms_lib.ca_rand_gaussian(self._generator, n, mean, std, buffer)
+
+
