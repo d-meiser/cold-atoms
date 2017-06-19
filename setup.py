@@ -14,7 +14,15 @@ with open('LICENSE') as f:
 # TODO(Dominic): The following flags are suitable for gcc and clang. Down the
 # road this will have to be special cased for the different toolchains. Also,
 # the ISA is hardwired for now.
-extra_compile_args = ['-std=c99', '-ffast-math', '-ftree-vectorize', '-msse4']
+extra_compile_args = [
+    '-std=c99',
+    '-ffast-math',
+    '-ftree-vectorize',
+    '-msse4',
+    '-DHAVE_SSE2',
+    '-DDSFMT_MEXP=19937'
+    ]
+
 extra_link_args = []
 
 coldatoms_lib = cythonize([Extension(
@@ -22,6 +30,7 @@ coldatoms_lib = cythonize([Extension(
     sources=['src/coldatoms_lib/bend_kick_updater.c',
              'src/coldatoms_lib/forces.c',
              'src/coldatoms_lib/ca_rand.c',
+	     'src/coldatoms_lib/dSFMT/dSFMT.c',
              'src/coldatoms_lib/coldatoms_lib.pyx'],
     include_dirs=['./src/coldatoms_lib/', numpy.get_include()],
     extra_compile_args=extra_compile_args,
