@@ -22,4 +22,5 @@ cdef extern from "ca_rand.h":
     void ca_rand_seed(CARandCtx* ctx, int seed);
     void ca_rand(CARandCtx* ctx, int n, double* x);
     void ca_rand_gaussian(CARandCtx* ctx, int n, double mean, double std, double* x);
+    void ca_rand_poisson(CARandCtx* ctx, int n, double nbar, int* x);
 

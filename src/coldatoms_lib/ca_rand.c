@@ -66,19 +66,35 @@ void ca_rand_gaussian(struct CARandCtx* ctx, int n, double mean, double std,
 		x[i] = generate_gaussian_random_number(ctx, mean, std);
 	}
 }
-
-#if 0
-int blGeneratePoisson(double nbar) {
-  static const double thresholdKnuth = 25.0;
-  if (nbar < thresholdKnuth) {
-    return blGeneratePoissonKnuth(nbar);
-  } else {
-    int sample;
-    do {
-      sample = round(blGenerateGaussianNoise(nbar, sqrt(nbar)));
-    } while (sample < 0);
-    return sample;
-  }
+	
+static int generate_poisson_knuth(struct CARandCtx* ctx, double lambda) {
+	double L = exp(-lambda);
+	int k = 0;
+	double p = 1.0;
+	do {
+		++k;
+		p *= dsfmt_genrand_close_open(&ctx->dsfmt);
+	} while (p > L);
+	return k - 1;
 }
 
-#endif
+int generate_poisson_random_number(struct CARandCtx* ctx, double nbar) {
+	static const double threshold_knuth = 25.0;
+	if (nbar < threshold_knuth) {
+		return generate_poisson_knuth(ctx, nbar);
+	} else {
+		int sample;
+		do {
+			sample = round(
+				generate_gaussian_random_number(ctx, nbar, sqrt(nbar)));
+		} while (sample < 0);
+		return sample;
+	}
+}
+
+void ca_rand_poisson(struct CARandCtx* ctx, int n, double nbar, int* x)
+{
+	for (int i = 0; i < n; ++i) {
+		x[i] = generate_poisson_random_number(ctx, nbar);
+	}
+}

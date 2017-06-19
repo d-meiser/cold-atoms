@@ -41,3 +41,11 @@ class test_rng(object):
         self.rng.fill_gaussian(mean, std, nums)
         assert(np.abs((np.mean(nums) - mean) / mean) < 0.1)
         assert(np.abs((np.std(nums) - std) / std) < 0.1)
+
+    def test_poisson(self):
+        nums = np.zeros(100, dtype=np.int32)
+        nbar = 5.5
+        self.rng.fill_poisson(nbar, nums)
+        assert(np.abs((np.mean(nums) - nbar) < 1.0))
+        assert(np.abs((np.std(nums) - nbar) < 1.0))
+
