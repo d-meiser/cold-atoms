@@ -101,3 +101,16 @@ cdef class Rng(object):
         ccoldatoms_lib.ca_rand_poisson(self._generator, n, nbar, buffer)
 
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def compute_nbar(double dt, double gamma, 
+    np.ndarray[double, ndim=1, mode="c"] s_of_r not None,
+    np.ndarray[double, ndim=1, mode="c"] delta not None,
+    np.ndarray[double, ndim=1, mode="c"] nbar not None):
+    assert(s_of_r.shape == nbar.shape)
+    assert(delta.shape == nbar.shape)
+
+    cdef num_ptcls
+    num_ptcls = nbar.shape[0]
+
+    ccoldatoms_lib.compute_nbars(num_ptcls, dt, gamma, &s_of_r[0], &delta[0], &nbar[0])

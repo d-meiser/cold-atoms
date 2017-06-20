@@ -24,3 +24,6 @@ cdef extern from "ca_rand.h":
     void ca_rand_gaussian(CARandCtx* ctx, int n, double mean, double std, double* x);
     void ca_rand_poisson(CARandCtx* ctx, int n, double nbar, int* x);
 
+cdef extern from "radiation_pressure.h":
+    void compute_nbars(int n, double dt, double gamma, const double* s_of_r,
+        const double* delta, double* nbar);
