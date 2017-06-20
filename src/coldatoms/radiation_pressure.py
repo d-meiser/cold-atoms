@@ -1,4 +1,5 @@
 import numpy as np
+import coldatoms_lib
 
 
 class RadiationPressure(object):
@@ -45,10 +46,8 @@ class RadiationPressure(object):
         deltas = self.detuning.detunings(ensemble.x, ensemble.v)
 
         # First we compute the expected numbers of scattered photons.
-        nbars = dt * s_of_r * ((self.gamma / 2.0 / np.pi) *
-                (self.gamma / 2.0)**2 /
-                ((self.gamma / 2.0)**2 * (1.0 + 2.0 * s_of_r) +
-                 deltas**2))
+        nbars = np.zeros_like(deltas)
+        coldatoms_lib.compute_nbars(dt, self.gamma, s_of_r, deltas, nbars)
 
         # Then we compute the recoil momentum according to momentum diffusion.
         # We assume that each atom undergoes a random walk in 3D momentum space

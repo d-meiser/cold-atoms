@@ -103,12 +103,12 @@ cdef class Rng(object):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def compute_nbar(double dt, double gamma, 
+def compute_nbars(double dt, double gamma, 
     np.ndarray[double, ndim=1, mode="c"] s_of_r not None,
     np.ndarray[double, ndim=1, mode="c"] delta not None,
     np.ndarray[double, ndim=1, mode="c"] nbar not None):
-    assert(s_of_r.shape == nbar.shape)
-    assert(delta.shape == nbar.shape)
+    assert(s_of_r.shape[0] == nbar.shape[0])
+    assert(delta.shape[0] == nbar.shape[0])
 
     cdef num_ptcls
     num_ptcls = nbar.shape[0]
