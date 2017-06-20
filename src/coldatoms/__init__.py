@@ -3,7 +3,6 @@ from .particles import (
     process_sink,
     produce_ptcls,
     Ensemble,
-    RadiationPressure,
     Sink,
     SinkPlane,
     Source,
@@ -14,7 +13,11 @@ from .coulomb import (
 from .bend_kick import (
     bend_kick
 )
+from .radiation_pressure import (
+    RadiationPressure
+)
 from coldatoms_lib import (
     Rng
 )
+
 
