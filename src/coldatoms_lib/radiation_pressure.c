@@ -1,4 +1,5 @@
 #include <radiation_pressure.h>
+#include <ca_rand.h>
 
 static const double two_pi = 2.0*3.14159265358979323846;
 #define SQR(a) ((a) * (a))
@@ -26,3 +27,20 @@ double scattering_rate(double gamma, double s, double delta)
 	return s * nu * half_gamma_squared /
 		(half_gamma_squared * (1.0 + 2.0 * s) + SQR(delta));
 }
+
+static void compute_recoil(
+	struct CARandCtx* ctx, double hbar_k, int n, double *recoil)
+{
+}
+
+void compute_recoils(int n,
+        struct CARandCtx* ctx, 
+	double hbar_k,
+	const int* ns,
+	double* recoils)
+{
+	for (int i = 0; i < n; ++i) {
+		compute_recoil(ctx, hbar_k, ns[i], recoils + 3 * i);
+	}
+}
+

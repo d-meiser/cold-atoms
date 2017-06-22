@@ -1,6 +1,9 @@
 #ifndef RADIATION_PRESSURE_H
 #define RADIATION_PRESSURE_H
 
+struct CARandCtx;
+
+
 /** Compute the number of scattered photons for resonance fluorescence
 
 The number of scattered photons for saturated resonance fluorescence is
@@ -18,6 +21,23 @@ void compute_nbars(int n,
 	const double* s_of_r,
 	const double* delta,
 	double *nbar);
+
+/*
+Compute recoil momenta.  This function assumes an isotropic distribution of the
+scattered photons.
+
+n        is the number of atoms.
+ctx      Random number generator context.
+hbar_k   is the momentum of one photon.
+nbar     is an array with the number of scattered photons for each atom.
+recoils  contains the recoild momenta for each atom in format [px0 py0 pz0 px1
+         py1 pz1 ...].
+*/
+void compute_recoils(int n,
+        struct CARandCtx* ctx, 
+	double hbar_k,
+	const int* ns,
+	double* recoils);
 
 #endif
 
