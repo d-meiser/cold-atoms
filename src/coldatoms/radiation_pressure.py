@@ -47,10 +47,4 @@ class RadiationPressure(object):
         nbars = np.zeros_like(deltas)
         coldatoms_lib.compute_nbars(dt, self.gamma, s_of_r, deltas, nbars)
         coldatoms_lib.add_radiation_pressure(coldatoms_lib.rng.context(), self.hbar_k, nbars, f)
-        # Then we compute the recoil momentum according to momentum diffusion.
-        # We assume that each atom undergoes a random walk in 3D momentum space
-        # with nbar steps and each step of length hbar k.
-        # recoil_momenta = np.random.normal(size=ensemble.x.shape)
-        # recoil_momenta *= np.sqrt(nbars[:, np.newaxis] / 3.0) * np.linalg.norm(self.hbar_k)
-        # f += nbars[:, np.newaxis] * self.hbar_k + recoil_momenta
 
