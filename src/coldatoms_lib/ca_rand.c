@@ -98,3 +98,4 @@ void ca_rand_poisson(struct CARandCtx* ctx, int n, double nbar, int* x)
 		x[i] = generate_poisson_random_number(ctx, nbar);
 	}
 }
+

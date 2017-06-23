@@ -3,6 +3,7 @@ import numpy as np
 cimport numpy as np
 cimport ccoldatoms_lib
 import atexit
+from libc.stdint cimport uintptr_t
 
 
 @cython.boundscheck(False)
@@ -74,6 +75,9 @@ cdef class Rng(object):
 
     cdef ccoldatoms_lib.CARandCtx* _generator
 
+    def context(self):
+        return <uintptr_t>self._generator
+
     def __cinit__(self, seed=None):
         self._generator = ccoldatoms_lib.ca_rand_create()
         if seed is not None:
@@ -87,17 +91,53 @@ cdef class Rng(object):
 
     def fill(self, np.ndarray[double, mode="c"] array):
         cdef int n = array.size
-        cdef double *buffer = <double *>array.data
-        ccoldatoms_lib.ca_rand(self._generator, n, buffer)
+        cdef double *a = <double *>array.data
+        ccoldatoms_lib.ca_rand(self._generator, n, a)
 
     def fill_gaussian(self, double mean, double std, np.ndarray[double, mode="c"] array):
         cdef int n = array.size
-        cdef double *buffer = <double *>array.data
-        ccoldatoms_lib.ca_rand_gaussian(self._generator, n, mean, std, buffer)
+        cdef double *a = <double *>array.data
+        ccoldatoms_lib.ca_rand_gaussian(self._generator, n, mean, std, a)
 
     def fill_poisson(self, double nbar, np.ndarray[int, mode="c"] array):
         cdef int n = array.size
-        cdef int *buffer = <int *>array.data
-        ccoldatoms_lib.ca_rand_poisson(self._generator, n, nbar, buffer)
+        cdef int *a = <int *>array.data
+        ccoldatoms_lib.ca_rand_poisson(self._generator, n, nbar, a)
 
+
+"""For convenience we provide a random number generator."""
+rng = Rng()
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def compute_nbars(double dt, double gamma, 
+    np.ndarray[double, ndim=1, mode="c"] s_of_r not None,
+    np.ndarray[double, ndim=1, mode="c"] delta not None,
+    np.ndarray[double, ndim=1, mode="c"] nbar not None):
+    assert(s_of_r.shape[0] == nbar.shape[0])
+    assert(delta.shape[0] == nbar.shape[0])
+
+    cdef num_ptcls
+    num_ptcls = nbar.shape[0]
+
+    ccoldatoms_lib.compute_nbars(num_ptcls, dt, gamma, &s_of_r[0], &delta[0], &nbar[0])
+
+def add_radiation_pressure(
+    uintptr_t rng_context,
+    np.ndarray[double, ndim=1, mode="c"] hbar_k,
+    np.ndarray[double, ndim=1, mode="c"] nbars not None,
+    np.ndarray[double, ndim=2, mode="c"] f not None):
+    assert(nbars.size == f.shape[0])
+    assert(f.shape[1] == 3)
+    assert(hbar_k.size == 3)
+
+    cdef num_ptcls
+    num_ptcls = nbars.shape[0]
+    ccoldatoms_lib.add_radiation_pressure(
+        num_ptcls,
+        <ccoldatoms_lib.CARandCtx*>rng_context,
+        &hbar_k[0],
+        &nbars[0],
+        &f[0, 0])
 
