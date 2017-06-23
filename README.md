@@ -4,3 +4,15 @@
 
 # cold-atoms
 A tool box for cold-atom simulations.
+
+
+# Acknowledgements
+
+The cold-atoms library relies on a number of open source libraries including
+
+* [numpy](http://www.numpy.org/)
+* [matplotlib](https://matplotlib.org/)
+* [Python](http://www.python.org/)
+* [jupyter](http://jupyter.org)
+* [dSFMT library for random number generation](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/)
+
