@@ -28,4 +28,4 @@ cdef extern from "ca_rand.h":
 cdef extern from "radiation_pressure.h":
     void compute_nbars(int n, double dt, double gamma, const double* s_of_r,
         const double* delta, double* nbar);
-    void compute_recoils(int n, CARandCtx* ctx, double hbar_k, const int* nbar, double* recoils);
+    void add_radiation_pressure(int n, CARandCtx* ctx, const double* hbar_k, const double* nbar, double* force);

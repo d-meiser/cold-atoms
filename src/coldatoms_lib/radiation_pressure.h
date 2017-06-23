@@ -33,11 +33,11 @@ nbar     is an array with the number of scattered photons for each atom.
 recoils  contains the recoild momenta for each atom in format [px0 py0 pz0 px1
          py1 pz1 ...].
 */
-void compute_recoils(int n,
+void add_radiation_pressure(int n,
         struct CARandCtx* ctx, 
-	double hbar_k,
-	const int* ns,
-	double* recoils);
+	const double* hbar_k,
+	const double* nbars,
+	double* f);
 
 #endif
 

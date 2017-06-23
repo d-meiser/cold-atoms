@@ -104,13 +104,6 @@ cdef class Rng(object):
         cdef int *a = <int *>array.data
         ccoldatoms_lib.ca_rand_poisson(self._generator, n, nbar, a)
 
-    def fill_poisson_many(self, np.ndarray[double, mode="c"] nbars, np.ndarray[int, mode="c"] array):
-        assert(nbars.size == array.size)
-        cdef int n = array.size
-        cdef double *ns = <double *>nbars.data
-        cdef int *a = <int *>array.data
-        ccoldatoms_lib.ca_rand_poisson_many(self._generator, n, ns, a)
-
 
 """For convenience we provide a random number generator."""
 rng = Rng()
@@ -130,14 +123,21 @@ def compute_nbars(double dt, double gamma,
 
     ccoldatoms_lib.compute_nbars(num_ptcls, dt, gamma, &s_of_r[0], &delta[0], &nbar[0])
 
-def compute_recoils(double hbar_k,
+def add_radiation_pressure(
     uintptr_t rng_context,
-    np.ndarray[int, ndim=1, mode="c"] ns not None,
-    np.ndarray[double, ndim=2, mode="c"] recoils not None):
-    assert(ns.size == recoils.shape[0])
-    assert(recoils.shape[1] == 3)
+    np.ndarray[double, ndim=1, mode="c"] hbar_k,
+    np.ndarray[double, ndim=1, mode="c"] nbars not None,
+    np.ndarray[double, ndim=2, mode="c"] f not None):
+    assert(nbars.size == f.shape[0])
+    assert(f.shape[1] == 3)
+    assert(hbar_k.size == 3)
 
     cdef num_ptcls
-    num_ptcls = ns.shape[0]
-    ccoldatoms_lib.compute_recoils(num_ptcls, <ccoldatoms_lib.CARandCtx*>rng_context, hbar_k, &ns[0], &recoils[0, 0])
+    num_ptcls = nbars.shape[0]
+    ccoldatoms_lib.add_radiation_pressure(
+        num_ptcls,
+        <ccoldatoms_lib.CARandCtx*>rng_context,
+        &hbar_k[0],
+        &nbars[0],
+        &f[0, 0])
 

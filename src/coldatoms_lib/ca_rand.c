@@ -99,9 +99,3 @@ void ca_rand_poisson(struct CARandCtx* ctx, int n, double nbar, int* x)
 	}
 }
 
-void ca_rand_poisson_many(struct CARandCtx* ctx, int n, const double *nbars, int *x)
-{
-	for (int i = 0; i < n; ++i) {
-		x[i] = generate_poisson_random_number(ctx, nbars[i]);
-	}
-}
