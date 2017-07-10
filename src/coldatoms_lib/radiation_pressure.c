@@ -57,14 +57,16 @@ static void add_radiation_pressure_small_n(
 	int n,
 	double* f)
 {
+	if (0 == n) return;
 	assert(n <= CA_LARGE_N);
+
 	double directions[3][CA_LARGE_N];
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[0][0]);
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[1][0]);
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[2][0]);
 	double nrms[CA_LARGE_N] = { 0.0 };
 	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < n; ++n) {
+		for (int j = 0; j < n; ++j) {
 			nrms[j] += SQR(directions[i][j]);
 		}
 	}
@@ -72,7 +74,7 @@ static void add_radiation_pressure_small_n(
 		nrms[j] = sqrt(nrms[j]);
 	}
 	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < n; ++n) {
+		for (int j = 0; j < n; ++j) {
 			directions[i][j] /= nrms[j];
 		}
 	}
