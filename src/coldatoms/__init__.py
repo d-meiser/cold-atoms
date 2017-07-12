@@ -16,6 +16,9 @@ from .bend_kick import (
 from .radiation_pressure import (
     RadiationPressure
 )
+from .penning_trap import (
+    HarmonicTrapPotential
+)
 from coldatoms_lib import (
     Rng
 )

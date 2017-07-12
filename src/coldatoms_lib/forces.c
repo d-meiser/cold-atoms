@@ -183,3 +183,9 @@ static void coulomb_force_cleanup(const double *restrict positions,
 		forces += NUM_COMPONENTS;
 	}
 }
+
+void harmonic_trap_forces(const double *positions, double q,
+	double kx, double ky, double kz, double phi,
+	double dt, int num_ptcls, double *forces)
+{
+}

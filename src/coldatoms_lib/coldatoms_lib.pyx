@@ -37,6 +37,25 @@ def coulomb_force_per_particle_charge(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
+def harmonic_trap_forces(
+    np.ndarray[double, ndim=2, mode="c"] positions not None,
+    double q,
+    double kx, double ky, double kz, double phi,
+    double dt, 
+    np.ndarray[double, ndim=2, mode="c"] forces not None):
+    assert(positions.shape[0] <= forces.shape[0])
+    assert(positions.shape[1] == 3)
+    assert(forces.shape[1] == 3)
+
+    cdef num_ptcls
+    num_ptcls = positions.shape[0]
+
+    ccoldatoms_lib.harmonic_trap_forces(
+        &positions[0, 0], q, kx, ky, kz, phi, dt, num_ptcls, &forces[0, 0])
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def bend_kick_update_scalar(
     double dt, double omegaB,
     np.ndarray[double, ndim=2, mode="c"] x not None,

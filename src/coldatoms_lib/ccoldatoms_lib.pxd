@@ -4,6 +4,9 @@ cdef extern from "forces.h":
     void coulomb_force_per_particle_charges(const double* positions,
                        double* charge, double dt, int num_ptcls, double delta,
                        double k, double* forces);
+    void harmonic_trap_forces(const double* positions, double q,
+                       double kx, double ky, double kz, double phi, double dt,
+                       int num_ptcls, double *forces);
 
 cdef extern from "bend_kick_updater.h":
     void bend_kick_update_scalar(double dt, double omegaB,
