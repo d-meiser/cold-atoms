@@ -187,9 +187,10 @@ static void coulomb_force_cleanup(const double *restrict positions,
 	}
 }
 
-void harmonic_trap_forces(const double *positions, double q,
+void harmonic_trap_forces(const double *restrict positions,
+	double q,
 	double kx, double ky, double kz, double phi,
-	double dt, int num_ptcls, double *forces)
+	double dt, int num_ptcls, double *restrict forces)
 {
 	double cphi = cos(phi);
 	double sphi = sin(phi);
@@ -211,9 +212,11 @@ void harmonic_trap_forces(const double *positions, double q,
 }
 
 void harmonic_trap_forces_per_particle_charge(
-	const double *positions, const double *q,
+	const double *restrict positions,
+	const double *restrict q,
 	double kx, double ky, double kz, double phi,
-	double dt, int num_ptcls, double *forces)
+	double dt, int num_ptcls,
+	double *restrict forces)
 {
 	double cphi = cos(phi);
 	double sphi = sin(phi);
