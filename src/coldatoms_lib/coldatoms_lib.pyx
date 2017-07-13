@@ -31,7 +31,7 @@ def coulomb_force_per_particle_charge(
     cdef num_ptcls
     num_ptcls = positions.shape[0]
 
-    ccoldatoms_lib.coulomb_force_per_particle_charges(
+    ccoldatoms_lib.coulomb_force_per_particle_charge(
         &positions[0, 0], &charges[0], dt, num_ptcls, delta, k, &forces[0, 0])
 
 
@@ -69,7 +69,7 @@ def harmonic_trap_forces_per_particle_charge(
     cdef num_ptcls
     num_ptcls = positions.shape[0]
 
-    ccoldatoms_lib.harmonic_trap_forces_per_particle_charges(
+    ccoldatoms_lib.harmonic_trap_forces_per_particle_charge(
         &positions[0, 0], &q[0], kx, ky, kz, phi, dt, num_ptcls, &forces[0, 0])
 
 
