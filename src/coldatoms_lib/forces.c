@@ -3,6 +3,9 @@
 #include <assert.h>
 #include <stdio.h>
 
+#define SQR(a) ((a) * (a))
+
+
 static double distance(const double *r, double delta)
 {
 	double dist = 0.0;
@@ -188,4 +191,45 @@ void harmonic_trap_forces(const double *positions, double q,
 	double kx, double ky, double kz, double phi,
 	double dt, int num_ptcls, double *forces)
 {
+	double cphi = cos(phi);
+	double sphi = sin(phi);
+
+	double alpha = q * dt;
+
+	for (int i = 0; i < num_ptcls; ++i) {
+		double x = positions[i * 3 + 0];
+		double y = positions[i * 3 + 1];
+		double z = positions[i * 3 + 2];
+		forces[i * 3 + 0] += alpha * (
+			(-kx * SQR(cphi) - ky * SQR(sphi)) * x +
+			cphi * sphi * (ky - kx) * y);
+		forces[i * 3 + 1] += alpha * (
+			cphi * sphi * (ky - kx) * x +
+			(-kx * SQR(sphi) - ky * SQR(cphi)) * y);
+		forces[i * 3 + 2] += -alpha * kz * z;
+	}
+}
+
+void harmonic_trap_forces_per_particle_charges(
+	const double *positions, const double *q,
+	double kx, double ky, double kz, double phi,
+	double dt, int num_ptcls, double *forces)
+{
+	double cphi = cos(phi);
+	double sphi = sin(phi);
+
+
+	for (int i = 0; i < num_ptcls; ++i) {
+		double alpha = q[i] * dt;
+		double x = positions[i * 3 + 0];
+		double y = positions[i * 3 + 1];
+		double z = positions[i * 3 + 2];
+		forces[i * 3 + 0] += alpha * (
+			(-kx * SQR(cphi) - ky * SQR(sphi)) * x +
+			cphi * sphi * (ky - kx) * y);
+		forces[i * 3 + 1] += alpha * (
+			cphi * sphi * (ky - kx) * x +
+			(-kx * SQR(sphi) - ky * SQR(cphi)) * y);
+		forces[i * 3 + 2] += -alpha * kz * z;
+	}
 }

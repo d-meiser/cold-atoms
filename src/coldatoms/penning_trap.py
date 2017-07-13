@@ -14,7 +14,7 @@ def _harmonic_trap_forces_ref(positions, q, kx, ky, kz, phi, dt, f):
         (-kx * cphi * cphi - ky * sphi * sphi) * x + cphi * sphi * (ky - kx) * y)
     f[:, 1] += dt * q * (
         cphi * sphi * (ky - kx) * x + (-kx * sphi * sphi - ky * cphi * cphi) * y)
-    f[:, 2] += -dt * q *self.kz * z
+    f[:, 2] += -dt * q * kz * z
 
 
 class HarmonicTrapPotential(object):
@@ -23,6 +23,10 @@ class HarmonicTrapPotential(object):
         self.ky = ky
         self.kz = kz
         self.phi = 0.0
+        self._harmonic_trap_forces = coldatoms_lib.harmonic_trap_forces
+        self._harmonic_trap_forces_per_particle_charges = coldatoms_lib.harmonic_trap_forces_per_particle_charge
+
+    def use_reference_implementations(self):
         self._harmonic_trap_forces = _harmonic_trap_forces_ref
         self._harmonic_trap_forces_per_particle_charges = _harmonic_trap_forces_ref
 
