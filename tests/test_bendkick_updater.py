@@ -114,6 +114,35 @@ class test_bendkickupdater(object):
 
         assert(np.linalg.norm(final_positions - final_positions_ref) < 1.0e-6)
         assert(np.linalg.norm(final_velocities - final_velocities_ref) < 1.0e-6)
+
+    def test_multiple_steps_same_as_individual_steps(self):
+        Bz = 1.7
+        q = self.ensemble.ensemble_properties['charge']
+        m = self.ensemble.ensemble_properties['mass']
+        dt = 1.2e-7
+        num_steps = 4
+
+        initial_positions = np.random.random(self.ensemble.x.shape)
+        initial_velocities = np.random.random(self.ensemble.v.shape)
+
+        self.ensemble.x = np.copy(initial_positions)
+        self.ensemble.v = np.copy(initial_velocities)
+
+        coldatoms.bend_kick(dt, Bz, self.ensemble, [], num_steps=num_steps)
+        final_positions = np.copy(self.ensemble.x)
+        final_velocities = np.copy(self.ensemble.v)
+
+        # now compute the reference solution
+        self.ensemble.x = np.copy(initial_positions)
+        self.ensemble.v = np.copy(initial_velocities)
+        for i in range(num_steps):
+            coldatoms.bend_kick(dt, Bz, self.ensemble, [])
+        final_positions_ref = np.copy(self.ensemble.x)
+        final_velocities_ref = np.copy(self.ensemble.v)
+
+        assert(np.linalg.norm(final_positions - final_positions_ref) < 1.0e-6)
+        assert(np.linalg.norm(final_velocities - final_velocities_ref) < 1.0e-6)
+
     def test_spot_check_per_particle(self):
         Bz = 1.7
         q = self.ensemble.ensemble_properties['charge']

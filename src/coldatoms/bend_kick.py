@@ -17,8 +17,11 @@ def bend_kick_update_reference_impl(dt, omegaB, x, v):
     v[:, 0] = vx
 
 
-def bend_kick(dt, Bz, ensemble, forces, reference_impl=False):
+def bend_kick(dt, Bz, ensemble, forces, num_steps=1, reference_impl=False):
     """Integrator for particle motion in a constant magnetic field"""
+
+    if num_steps < 1:
+        return
 
     if 'charge' in ensemble.ensemble_properties:
         q = ensemble.ensemble_properties['charge']
@@ -42,11 +45,20 @@ def bend_kick(dt, Bz, ensemble, forces, reference_impl=False):
          updater = coldatoms_lib.bend_kick_update
 
     if len(forces) == 0:
-        updater(dt, omegaB, ensemble.x, ensemble.v)
+        updater(num_steps * dt, omegaB, ensemble.x, ensemble.v)
     else:
         updater(0.5 * dt, omegaB, ensemble.x, ensemble.v)
+
         f = np.zeros_like(ensemble.v)
+
+        for i in range(num_steps - 1):
+            for force in forces:
+                force.force(dt, ensemble, f)
+            ensemble.v += f / m
+            updater(dt, omegaB, ensemble.x, ensemble.v)
+            f.fill(0.0)
+
         for force in forces:
             force.force(dt, ensemble, f)
         ensemble.v += f / m
-        updater(0.5 * dt, omegaB, ensemble.x, ensemble.v)
+        updater(dt, omegaB, ensemble.x, ensemble.v)
