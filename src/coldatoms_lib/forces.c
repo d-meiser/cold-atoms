@@ -68,7 +68,17 @@ static void transpose(const double *restrict x, int m, int n,
 	}
 }
 
-#define CHUNK_SIZE 32
+static void transpose_accumulate(const double *restrict x, int m, int n,
+	double *restrict y)
+{
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			y[j * m + i] += x[i * n + j];
+		}
+	}
+}
+
+#define CHUNK_SIZE 16
 #define NUM_COMPONENTS 3
 
 static void distance_chunked(const double *restrict r, double delta, double
@@ -136,7 +146,7 @@ static void coulomb_force_chunked(const double *restrict positions,
 			accumulate_force(&x0[0][0], &x1[0][0], &f[0][0], k,
 					 delta);
 		}
-		transpose(&f[0][0], NUM_COMPONENTS, CHUNK_SIZE,
+		transpose_accumulate(&f[0][0], NUM_COMPONENTS, CHUNK_SIZE,
 			  forces + i * NUM_COMPONENTS * CHUNK_SIZE);
 	}
 }
