@@ -70,6 +70,26 @@ class test_coulomb(object):
         normalization = np.linalg.norm(f_ref) + np.linalg.norm(f)
         assert(np.linalg.norm(f - f_ref) < 1.0e-9 * normalization)
 
+    def test_per_particle_charge_spot_check(self):
+        self.ensemble = coldatoms.Ensemble(2)
+        self.ensemble.x[0, :] = 0.0
+        self.ensemble.x[1, 0] = 1.3
+        self.ensemble.x[1, 1] = 1.5
+        self.ensemble.x[1, 2] = 1.7
+        q = 1.3 * np.array([1.6e-19, 2.0 * 1.6e-19])
+        self.ensemble.ensemble_properties = {}
+        self.ensemble.set_particle_property('charge', q)
+        dt = 1.0e-2
+        r = self.ensemble.x[0, :] - self.ensemble.x[1, :]
+        dist = np.linalg.norm(r)
+        ke = 1.0 / (4.0 * np.pi * 8.854e-12)
+        f_expected = ke * r * q[0] * q[1] / (dist**3)
+        f_expected *= dt
+        self.coulomb_force.force(dt, self.ensemble, self.f)
+        normalization = np.sqrt(
+            np.linalg.norm(self.f[0])**2 + np.linalg.norm(f_expected)**2)
+        assert(np.linalg.norm(self.f[0] - f_expected) / normalization < 1.0e-9)
+
     def test_compare_per_particle_charge_algs_with_reference_impl(self):
         m, n = self.ensemble.x.shape
         self.ensemble.x = np.random.rand(m, n)

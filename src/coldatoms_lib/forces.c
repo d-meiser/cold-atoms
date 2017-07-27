@@ -2,8 +2,10 @@
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
+#include <float.h>
 
 #define SQR(a) ((a) * (a))
+#define DIST_CUBED_EPSILON (1.0e1 * DBL_MIN)
 
 
 static double distance(const double *r, double delta)
@@ -37,19 +39,25 @@ void coulomb_force_per_particle_charge(const double *positions,
 					const double *charge, double dt, int num_ptcls,
 					double delta, double k, double *forces)
 {
+	double kp = dt * k;
 	const double *r0 = positions;
 	for (int i = 0; i < num_ptcls; ++i) {
+		double ki = kp * charge[i];
 		const double *r1 = positions;
 		for (int j = 0; j < num_ptcls; ++j) {
+			if (j == i) {
+				r1 += 3;
+				continue;
+			}
 			double r[3];
 			for (int m = 0; m < 3; ++m) {
 				r[m] = r0[m] - r1[m];
 			}
 			double dist = distance(r, delta);
 			double dist_cubed = dist * dist * dist;
-			double kp = dt * k * charge[i] * charge[j];
+			double kj = ki * charge[j];
 			for (int m = 0; m < 3; ++m) {
-				forces[m] += kp * r[m] / dist_cubed;
+				forces[m] += kj * r[m] / dist_cubed;
 			}
 			r1 += 3;
 		}
@@ -170,8 +178,9 @@ static void coulomb_force_cleanup(const double *restrict positions,
 			}
 			double dist = distance(r, delta);
 			double dist_cubed = dist * dist * dist;
+			if (dist_cubed < DIST_CUBED_EPSILON) continue;
 			for (int m = 0; m < NUM_COMPONENTS; ++m) {
-				forces[m] += k * r[m] / dist_cubed;
+				forces[m] += k * (r[m] / dist_cubed);
 			}
 		}
 		r0 += NUM_COMPONENTS;
@@ -188,8 +197,9 @@ static void coulomb_force_cleanup(const double *restrict positions,
 			}
 			double dist = distance(r, delta);
 			double dist_cubed = dist * dist * dist;
+			if (dist_cubed < DIST_CUBED_EPSILON) continue;
 			for (int m = 0; m < 3; ++m) {
-				forces[m] += k * r[m] / dist_cubed;
+				forces[m] += k * (r[m] / dist_cubed);
 			}
 		}
 		r0 += NUM_COMPONENTS;

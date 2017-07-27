@@ -26,7 +26,7 @@ def _coulomb_force_ref_per_particle_charges(positions, q, dt,
 class CoulombForce(object):
 
     _epsilon0 = 8.854e-12
-    _k = 4.0 * np.pi * _epsilon0
+    _k = 1.0 / (4.0 * np.pi * _epsilon0)
 
     def __init__(self):
         self.delta = 0.0
