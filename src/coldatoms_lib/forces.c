@@ -5,7 +5,6 @@
 #include <float.h>
 
 #define SQR(a) ((a) * (a))
-#define DIST_CUBED_EPSILON (1.0e1 * DBL_MIN)
 #define NUM_COMPONENTS 3
 
 
@@ -17,6 +16,20 @@ static double distance(const double *r, double delta)
 	}
 	dist += delta;
 	return sqrt(dist);
+}
+
+static void coulomb_force_one_pair(const double *r0, const double *r1,
+	double kij, double delta,  double *f)
+{
+	double r[NUM_COMPONENTS];
+	for (int m = 0; m < NUM_COMPONENTS; ++m) {
+		r[m] = r0[m] - r1[m];
+	}
+	double dist = distance(r, delta);
+	double dist_cubed = dist * dist * dist;
+	for (int m = 0; m < NUM_COMPONENTS; ++m) {
+		f[m] += kij * r[m] / dist_cubed;
+	}
 }
 
 void coulomb_force(const double *positions, double charge, double dt,
@@ -32,15 +45,7 @@ void coulomb_force(const double *positions, double charge, double dt,
 				r1 += NUM_COMPONENTS;
 				continue;
 			}
-			double r[NUM_COMPONENTS];
-			for (int m = 0; m < NUM_COMPONENTS; ++m) {
-				r[m] = r0[m] - r1[m];
-			}
-			double dist = distance(r, delta);
-			double dist_cubed = dist * dist * dist;
-			for (int m = 0; m < NUM_COMPONENTS; ++m) {
-				forces[m] += kij * r[m] / dist_cubed;
-			}
+			coulomb_force_one_pair(r0, r1, kij, delta, forces);
 			r1 += NUM_COMPONENTS;
 		}
 		r0 += NUM_COMPONENTS;
@@ -62,16 +67,8 @@ void coulomb_force_per_particle_charge(const double *positions,
 				r1 += NUM_COMPONENTS;
 				continue;
 			}
-			double r[NUM_COMPONENTS];
-			for (int m = 0; m < NUM_COMPONENTS; ++m) {
-				r[m] = r0[m] - r1[m];
-			}
-			double dist = distance(r, delta);
-			double dist_cubed = dist * dist * dist;
 			double kij = ki * charge[j];
-			for (int m = 0; m < NUM_COMPONENTS; ++m) {
-				forces[m] += kij * r[m] / dist_cubed;
-			}
+			coulomb_force_one_pair(r0, r1, kij, delta, forces);
 			r1 += NUM_COMPONENTS;
 		}
 		r0 += NUM_COMPONENTS;
