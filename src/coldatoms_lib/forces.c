@@ -2,7 +2,6 @@
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
-#include <float.h>
 
 #define SQR(a) ((a) * (a))
 #define NUM_COMPONENTS 3
@@ -37,19 +36,14 @@ void coulomb_force(const double *positions, double charge, double dt,
 	double delta, double k, double *forces)
 {
 	double kij = charge * charge * dt * k;
-	const double *r0 = positions;
 	for (int i = 0; i < num_ptcls; ++i) {
-		const double *r1 = positions;
+		const double *r0 = &positions[i * NUM_COMPONENTS];
+		double *f = &forces[i * NUM_COMPONENTS];
 		for (int j = 0; j < num_ptcls; ++j) {
-			if (j == i) {
-				r1 += NUM_COMPONENTS;
-				continue;
-			}
-			coulomb_force_one_pair(r0, r1, kij, delta, forces);
-			r1 += NUM_COMPONENTS;
+			if (j == i) continue;
+			const double *r1 = &positions[j * NUM_COMPONENTS];
+			coulomb_force_one_pair(r0, r1, kij, delta, f);
 		}
-		r0 += NUM_COMPONENTS;
-		forces += NUM_COMPONENTS;
 	}
 }
 
@@ -58,21 +52,16 @@ void coulomb_force_per_particle_charge(const double *positions,
 					double delta, double k, double *forces)
 {
 	double kp = dt * k;
-	const double *r0 = positions;
 	for (int i = 0; i < num_ptcls; ++i) {
 		double ki = kp * charge[i];
-		const double *r1 = positions;
+		const double *r0 = &positions[i * NUM_COMPONENTS];
+		double *f = &forces[i * NUM_COMPONENTS];
 		for (int j = 0; j < num_ptcls; ++j) {
-			if (j == i) {
-				r1 += NUM_COMPONENTS;
-				continue;
-			}
+			if (j == i) continue;
+			const double *r1 = &positions[j * NUM_COMPONENTS];
 			double kij = ki * charge[j];
-			coulomb_force_one_pair(r0, r1, kij, delta, forces);
-			r1 += NUM_COMPONENTS;
+			coulomb_force_one_pair(r0, r1, kij, delta, f);
 		}
-		r0 += NUM_COMPONENTS;
-		forces += NUM_COMPONENTS;
 	}
 }
 
