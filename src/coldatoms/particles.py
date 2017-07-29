@@ -52,8 +52,8 @@ class Ensemble(object):
         """
         self.x = np.delete(self.x, indices, 0)
         self.v = np.delete(self.v, indices, 0)
-        for property in self.particle_properties:
-            property = np.delete(property, indices, 0)
+        for prop in self.particle_properties:
+            prop = np.delete(prop, indices, 0)
 
 
 class Source(object):
