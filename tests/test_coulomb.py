@@ -82,7 +82,7 @@ class test_coulomb(object):
         dt = 1.0e-2
         r = self.ensemble.x[0, :] - self.ensemble.x[1, :]
         dist = np.linalg.norm(r)
-        ke = 1.0 / (4.0 * np.pi * 8.854e-12)
+        ke = 1.0 / (4.0 * np.pi * 8.854187817620e-12)
         f_expected = ke * r * q[0] * q[1] / (dist**3)
         f_expected *= dt
         self.coulomb_force.force(dt, self.ensemble, self.f)
@@ -101,7 +101,7 @@ class test_coulomb(object):
         dt = 1.0e-2
         r = self.ensemble.x[0, :] - self.ensemble.x[1, :]
         dist = np.linalg.norm(r)
-        ke = 1.0 / (4.0 * np.pi * 8.854e-12)
+        ke = 1.0 / (4.0 * np.pi * 8.854187817620e-12)
         f_expected = ke * r * q * q / (dist**3)
         f_expected *= dt
         self.coulomb_force.force(dt, self.ensemble, self.f)
