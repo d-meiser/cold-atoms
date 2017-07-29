@@ -10,7 +10,7 @@ static const double two_pi = 2.0*3.14159265358979323846;
 static double scattering_rate(double gamma, double s, double delta);
 
 
-void compute_nbars(int n,
+void ca_compute_nbars(int n,
 	double dt,
 	double gamma,
 	const double* s_of_r,
@@ -106,7 +106,7 @@ static void add_radiation_pressure_one(
 	}
 }
 
-void add_radiation_pressure(int n,
+void ca_add_radiation_pressure(int n,
         struct CARandCtx* ctx, 
 	const double* hbar_k,
 	const double* nbars,

@@ -31,7 +31,7 @@ static void coulomb_force_one_pair(const double *r0, const double *r1,
 	}
 }
 
-void coulomb_force(const double *positions, double charge, double dt,
+void ca_coulomb_force(const double *positions, double charge, double dt,
 	int num_ptcls,
 	double delta, double k, double *forces)
 {
@@ -47,7 +47,7 @@ void coulomb_force(const double *positions, double charge, double dt,
 	}
 }
 
-void coulomb_force_per_particle_charge(const double *positions,
+void ca_coulomb_force_per_particle_charge(const double *positions,
 					const double *charge, double dt, int num_ptcls,
 					double delta, double k, double *forces)
 {
@@ -65,7 +65,7 @@ void coulomb_force_per_particle_charge(const double *positions,
 	}
 }
 
-void harmonic_trap_forces(const double *restrict positions,
+void ca_harmonic_trap_forces(const double *restrict positions,
 	double q,
 	double kx, double ky, double kz, double phi,
 	double dt, int num_ptcls, double *restrict forces)
@@ -89,7 +89,7 @@ void harmonic_trap_forces(const double *restrict positions,
 	}
 }
 
-void harmonic_trap_forces_per_particle_charge(
+void ca_harmonic_trap_forces_per_particle_charge(
 	const double *restrict positions,
 	const double *restrict q,
 	double kx, double ky, double kz, double phi,

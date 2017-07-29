@@ -16,7 +16,7 @@ def coulomb_force(
     cdef num_ptcls
     num_ptcls = positions.shape[0]
 
-    ccoldatoms_lib.coulomb_force(
+    ccoldatoms_lib.ca_coulomb_force(
         &positions[0, 0], charge, dt, num_ptcls, delta, k, &forces[0, 0])
     
 
@@ -31,7 +31,7 @@ def coulomb_force_per_particle_charge(
     cdef num_ptcls
     num_ptcls = positions.shape[0]
 
-    ccoldatoms_lib.coulomb_force_per_particle_charge(
+    ccoldatoms_lib.ca_coulomb_force_per_particle_charge(
         &positions[0, 0], &charges[0], dt, num_ptcls, delta, k, &forces[0, 0])
 
 
@@ -50,7 +50,7 @@ def harmonic_trap_forces(
     cdef num_ptcls
     num_ptcls = positions.shape[0]
 
-    ccoldatoms_lib.harmonic_trap_forces(
+    ccoldatoms_lib.ca_harmonic_trap_forces(
         &positions[0, 0], q, kx, ky, kz, phi, dt, num_ptcls, &forces[0, 0])
 
 
@@ -69,7 +69,7 @@ def harmonic_trap_forces_per_particle_charge(
     cdef num_ptcls
     num_ptcls = positions.shape[0]
 
-    ccoldatoms_lib.harmonic_trap_forces_per_particle_charge(
+    ccoldatoms_lib.ca_harmonic_trap_forces_per_particle_charge(
         &positions[0, 0], &q[0], kx, ky, kz, phi, dt, num_ptcls, &forces[0, 0])
 
 
@@ -83,7 +83,7 @@ def bend_kick_update_scalar(
     cdef num_ptcls
     num_ptcls = x.shape[0]
 
-    ccoldatoms_lib.bend_kick_update_scalar(
+    ccoldatoms_lib.ca_bend_kick_update_scalar(
         dt, omegaB, num_ptcls, &x[0, 0], &v[0, 0])
 
 
@@ -98,7 +98,7 @@ def bend_kick_update_vector(
     cdef num_ptcls
     num_ptcls = x.shape[0]
 
-    ccoldatoms_lib.bend_kick_update_vector(
+    ccoldatoms_lib.ca_bend_kick_update_vector(
         dt, &omegaB[0], num_ptcls, &x[0, 0], &v[0, 0])
 
 
@@ -159,7 +159,7 @@ def compute_nbars(double dt, double gamma,
     cdef num_ptcls
     num_ptcls = nbar.shape[0]
 
-    ccoldatoms_lib.compute_nbars(num_ptcls, dt, gamma, &s_of_r[0], &delta[0], &nbar[0])
+    ccoldatoms_lib.ca_compute_nbars(num_ptcls, dt, gamma, &s_of_r[0], &delta[0], &nbar[0])
 
 def add_radiation_pressure(
     uintptr_t rng_context,
@@ -172,7 +172,7 @@ def add_radiation_pressure(
 
     cdef num_ptcls
     num_ptcls = nbars.shape[0]
-    ccoldatoms_lib.add_radiation_pressure(
+    ccoldatoms_lib.ca_add_radiation_pressure(
         num_ptcls,
         <ccoldatoms_lib.CARandCtx*>rng_context,
         &hbar_k[0],
