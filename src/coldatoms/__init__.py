@@ -3,6 +3,8 @@ from .particles import (
     process_sink,
     produce_ptcls,
     Ensemble,
+    json_to_ensemble,
+    ensemble_to_json,
     Sink,
     SinkPlane,
     Source,
