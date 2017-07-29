@@ -1,4 +1,6 @@
 import numpy as np
+import json
+import ast
 
 
 class Ensemble(object):
@@ -52,8 +54,40 @@ class Ensemble(object):
         """
         self.x = np.delete(self.x, indices, 0)
         self.v = np.delete(self.v, indices, 0)
-        for property in self.particle_properties:
-            property = np.delete(property, indices, 0)
+        for prop in self.particle_properties:
+            prop = np.delete(prop, indices, 0)
+
+
+def ensemble_to_json(ensemble):
+    """Serialize an Ensemble to a JSON string"""
+    serialized = {}
+    serialized['x'] = json.dumps(ensemble.x.tolist())
+    serialized['v'] = json.dumps(ensemble.v.tolist())
+    serialized['ensemble_properties'] = ensemble.ensemble_properties
+    particle_properties = {}
+    for prop,val in ensemble.particle_properties.items():
+        particle_properties[prop] = json.dumps(val.tolist())
+    serialized['particle_properties'] = particle_properties
+    return json.dumps(serialized)
+
+
+def json_to_ensemble(s):
+    """Deserialize an Ensemble from a JSON string"""
+    d = json.loads(s)
+    x = np.array(ast.literal_eval(d['x']))
+    v = np.array(ast.literal_eval(d['v']))
+    ensemble_properties = d['ensemble_properties']
+    particle_properties = {}
+    for key in d['particle_properties']:
+        val = d['particle_properties'][key]
+        particle_properties[key] = np.array(ast.literal_eval(val))
+    num_ptcls = x.shape[0]
+    ensemble = Ensemble(num_ptcls)
+    ensemble.x = x
+    ensemble.v = v
+    ensemble.ensemble_properties = ensemble_properties
+    ensemble.particle_properties = particle_properties
+    return ensemble
 
 
 class Source(object):
