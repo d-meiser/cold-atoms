@@ -2,6 +2,13 @@ import numpy as np
 import json
 import ast
 
+def arrays_equal(x, y, epsilon):
+    if x.shape != y.shape:
+        return False
+    normalization = np.linalg.norm(x) + np.linalg.norm(y)
+    if 0.0 == normalization:
+        return True
+    return np.linalg.norm(x - y) / normalization < epsilon
 
 class Ensemble(object):
     """An ensemble of particles.
@@ -14,6 +21,39 @@ class Ensemble(object):
         self.v = np.zeros([num_ptcls, 3], dtype=np.float64)
         self.ensemble_properties = {}
         self.particle_properties = {}
+
+    def copy(self):
+        the_copy = Ensemble()
+        the_copy.x = self.x.copy()
+        the_copy.v = self.v.copy()
+        for k in self.ensemble_properties.keys():
+            the_copy.ensemble_properties[k] = self.ensemble_properties[k]
+        for k in self.particle_properties.keys():
+            the_copy.particle_properties[k] = self.particle_properties[k].copy()
+        return the_copy
+
+    def equal(self, other, epsilon=1.0e-9):
+        if not arrays_equal(self.x, other.x, epsilon):
+            return False
+        if not arrays_equal(self.v, other.v, epsilon):
+            return False
+        if (set(self.ensemble_properties.keys()) !=
+            set(other.ensemble_properties.keys())):
+            return False
+        for k in self.ensemble_properties.keys():
+            val1 = self.ensemble_properties[k]
+            val2 = other.ensemble_properties[k]
+            if np.abs(val1 - val2) / (np.abs(val1) + np.abs(val2)) > epsilon:
+                return False
+        if (set(self.particle_properties.keys()) !=
+            set(other.particle_properties.keys())):
+            return False
+        for k in self.particle_properties.keys():
+            x = self.particle_properties[k]
+            y = other.particle_properties[k]
+            if not arrays_equal(x, y, epsilon):
+                return False
+        return True
 
     def get_num_ptcls(self):
         return self.x.shape[0]

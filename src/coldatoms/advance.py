@@ -1,0 +1,2 @@
+def advance(ensemble):
+    pass
