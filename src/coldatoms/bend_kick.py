@@ -61,4 +61,4 @@ def bend_kick(dt, Bz, ensemble, forces, num_steps=1, reference_impl=False):
         for force in forces:
             force.force(dt, ensemble, f)
         ensemble.v += f / m
-        updater(dt, omegaB, ensemble.x, ensemble.v)
+        updater(0.5 * dt, omegaB, ensemble.x, ensemble.v)
