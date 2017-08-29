@@ -14,8 +14,8 @@ environment:
 install:
   - "%PYTHON%\\python.exe -m pip install wheel"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
-  - "ci\\make.cmd %PYTHON%\\python.exe setup.py build"
-  - "ci\\make.cmd %PYTHON%\\python.exe setup.py develop"
+  - "%PYTHON%\\python.exe setup.py build"
+  - "%PYTHON%\\python.exe setup.py develop"
 
 build: off
 
@@ -23,7 +23,7 @@ test_script:
   - "nosetests --logging-level=INFO"
 
 after_test:
-  - "ci\\build.cmd %PYTHON%\\python.exe setup.py bdist_wheel"
+  - "%PYTHON%\\python.exe setup.py bdist_wheel"
 
 artifacts:
   - path: dist\*
