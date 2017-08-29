@@ -2,6 +2,8 @@
 #include <math.h>
 #include <assert.h>
 #include <stdio.h>
+#include <ca_utilities.h>
+
 
 #define SQR(a) ((a) * (a))
 #define NUM_COMPONENTS 3
@@ -65,10 +67,10 @@ void ca_coulomb_force_per_particle_charge(const double *positions,
 	}
 }
 
-void ca_harmonic_trap_forces(const double *restrict positions,
+void ca_harmonic_trap_forces(const double *CA_RESTRICT positions,
 	double q,
 	double kx, double ky, double kz, double phi,
-	double dt, int num_ptcls, double *restrict forces)
+	double dt, int num_ptcls, double *CA_RESTRICT forces)
 {
 	double cphi = cos(phi);
 	double sphi = sin(phi);
@@ -90,11 +92,11 @@ void ca_harmonic_trap_forces(const double *restrict positions,
 }
 
 void ca_harmonic_trap_forces_per_particle_charge(
-	const double *restrict positions,
-	const double *restrict q,
+	const double *CA_RESTRICT positions,
+	const double *CA_RESTRICT q,
 	double kx, double ky, double kz, double phi,
 	double dt, int num_ptcls,
-	double *restrict forces)
+	double *CA_RESTRICT forces)
 {
 	double cphi = cos(phi);
 	double sphi = sin(phi);
