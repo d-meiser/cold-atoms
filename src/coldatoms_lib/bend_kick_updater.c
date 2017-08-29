@@ -9,7 +9,7 @@ struct Vec3 {
 
 void ca_bend_kick_update_scalar(double dt, double omegaB,
 	int num_ptcls,
-	double *CA_RESTRICT x, double *CA_RESTRICT v)
+	double * x, double * v)
 {
 	double theta = dt * omegaB;
 	double cosTheta = cos(theta);
@@ -37,9 +37,9 @@ void ca_bend_kick_update_scalar(double dt, double omegaB,
 	}
 }
 
-void ca_bend_kick_update_vector(double dt, const double * CA_RESTRICT omegaB,
+void ca_bend_kick_update_vector(double dt, const double *  omegaB,
 	int num_ptcls,
-	double *CA_RESTRICT x, double * CA_RESTRICT v)
+	double * x, double *  v)
 {
 	struct Vec3 *pos = (struct Vec3 *)x;
 	struct Vec3 *vel = (struct Vec3 *)v;
