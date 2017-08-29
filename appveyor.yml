@@ -18,7 +18,7 @@ install:
 build: off
 
 test_script:
-  - "ci\\build.cmd %PYTHON%\\python.exe -m nosetests"
+  - nosetests
 
 after_test:
   - "ci\\build.cmd %PYTHON%\\python.exe setup.py bdist_wheel"
