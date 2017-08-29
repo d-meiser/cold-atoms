@@ -15,10 +15,12 @@ install:
   - "%PYTHON%\\python.exe -m pip install wheel"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
 
-build: off
+build:
+  - "ci\\make.cmd %PYTHON%\\python.exe setup.py build"
+  - "ci\\make.cmd %PYTHON%\\python.exe setup.py develop"
 
 test_script:
-  - nosetests
+  - "nosetests --logging-level=INFO"
 
 after_test:
   - "ci\\build.cmd %PYTHON%\\python.exe setup.py bdist_wheel"
