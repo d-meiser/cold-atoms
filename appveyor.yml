@@ -14,10 +14,10 @@ environment:
 install:
   - "%PYTHON%\\python.exe -m pip install wheel"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
-
-build:
   - "ci\\make.cmd %PYTHON%\\python.exe setup.py build"
   - "ci\\make.cmd %PYTHON%\\python.exe setup.py develop"
+
+build: off
 
 test_script:
   - "nosetests --logging-level=INFO"
