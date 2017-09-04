@@ -35,7 +35,7 @@ coldatoms_lib = cythonize([Extension(
              'src/coldatoms_lib/radiation_pressure.c',
              'src/coldatoms_lib/dSFMT/dSFMT.c',
              'src/coldatoms_lib/coldatoms_lib.pyx'],
-    include_dirs=['./src/coldatoms_lib/', numpy.get_include()],
+    include_dirs=['src/coldatoms_lib/', numpy.get_include()],
     extra_compile_args=extra_compile_args,
     extra_link_args=extra_link_args
     )])
