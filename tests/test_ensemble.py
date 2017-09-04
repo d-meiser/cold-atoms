@@ -121,15 +121,15 @@ def test_serialize_ensemble_rand_phase_space_with_ensemble_props():
     check_json_roundtrip(ensemble)
 
 
-#def test_serialize_ensemble():
-#    num_ptcls = 12
-#    ensemble = coldatoms.Ensemble(num_ptcls)
-#    ensemble.x = np.random.random_sample(tuple(ensemble.x.shape))
-#    ensemble.v = np.random.random_sample(tuple(ensemble.v.shape))
-#    ensemble.particle_properties['mass'] = (
-#        np.random.random_sample(ensemble.x.shape[0]))
-#    ensemble.particle_properties['density_matrix'] = (
-#        np.random.random_sample((ensemble.x.shape[0], 4, 4)))
-#    ensemble.ensemble_properties['charge'] = 1.7
-#    check_json_roundtrip(ensemble)
-#
+def test_serialize_ensemble():
+    num_ptcls = 12
+    ensemble = coldatoms.Ensemble(num_ptcls)
+    ensemble.x = np.random.random_sample(tuple(ensemble.x.shape))
+    ensemble.v = np.random.random_sample(tuple(ensemble.v.shape))
+    ensemble.particle_properties['mass'] = (
+        np.random.random_sample(ensemble.x.shape[0]))
+    ensemble.particle_properties['density_matrix'] = (
+        np.random.random_sample((ensemble.x.shape[0], 4, 4)))
+    ensemble.ensemble_properties['charge'] = 1.7
+    check_json_roundtrip(ensemble)
+
