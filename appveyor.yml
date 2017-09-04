@@ -24,7 +24,7 @@ environment:
       PYTHON_ARCH: "64"
 
     # 32 bit versions don't work for now.
-    allowfailures:
+    allow_failures:
       - PYTHON_ARCH: "32"
 
 install:
