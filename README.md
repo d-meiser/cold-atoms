@@ -93,6 +93,9 @@ If you wish to contribute to this project, please do the following:
 - Make your changes on a new branch without breaking any tests.
 - Open a pull request on GitHub.
 
+All python code should adhere to PEP8 and we use the linux kernel style guide
+for C code.
+
 To file a ticket pleas use
 the [github issue tracker](https://github.com/d-meiser/cold-atoms/issues).
 
