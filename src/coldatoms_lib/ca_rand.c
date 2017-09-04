@@ -88,8 +88,8 @@ int generate_poisson_random_number(struct CARandCtx* ctx, double nbar) {
 		return generate_poisson_knuth(ctx, nbar);
 	} else {
 		do {
-			sample = round(
-				generate_gaussian_random_number(ctx, nbar, sqrt(nbar)));
+			sample = generate_gaussian_random_number(
+				ctx, nbar, sqrt(nbar)) + 0.5;
 		} while (sample < 0);
 		return sample;
 	}
