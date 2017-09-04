@@ -17,7 +17,8 @@ void ca_compute_nbars(int n,
 	const double* delta,
 	double *nbar)
 {
-	for (int i = 0; i < n; ++i) {
+	int i;
+	for (i = 0; i < n; ++i) {
 		nbar[i] = dt * scattering_rate(gamma, s_of_r[i], delta[i]);
 	}
 }
@@ -38,8 +39,10 @@ static void add_radiation_pressure_large_n(
 	double* f)
 {
 	double recoil[3];
+	int i;
+
 	ca_rand_gaussian(ctx, 3, 0.0, hbar_k_nrm * sqrt(n / 3.0), recoil);
-	for (int i = 0; i < 3; ++i) {
+	for (i = 0; i < 3; ++i) {
 		f[i] += n * hbar_k[i] + recoil[i];
 	}
 }
@@ -65,27 +68,29 @@ static void add_radiation_pressure_small_n(
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[1][0]);
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[2][0]);
 	double nrms[CA_LARGE_N] = { 0.0 };
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < n; ++j) {
+	int i, j;
+
+	for (i = 0; i < 3; ++i) {
+		for (j = 0; j < n; ++j) {
 			nrms[j] += SQR(directions[i][j]);
 		}
 	}
-	for (int j = 0; j < n; ++j) {
+	for (j = 0; j < n; ++j) {
 		nrms[j] = sqrt(nrms[j]);
 	}
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < n; ++j) {
+	for (i = 0; i < 3; ++i) {
+		for (j = 0; j < n; ++j) {
 			directions[i][j] /= nrms[j];
 		}
 	}
 	double recoil[3] = { 0.0 };
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < n; ++j) {
+	for (i = 0; i < 3; ++i) {
+		for (j = 0; j < n; ++j) {
 			recoil[i] += directions[i][j];
 		}
 		recoil[i] *= hbar_k_nrm;
 	}
-	for (int i = 0; i < 3; ++i) {
+	for (i = 0; i < 3; ++i) {
 		f[i] += n * hbar_k[i] + recoil[i];
 	}
 }
@@ -113,11 +118,12 @@ void ca_add_radiation_pressure(int n,
 	double* f)
 {
 	double hbar_k_nrm = 0.0;
-	for (int i = 0; i < 3; ++i) {
+	int i;
+	for (i = 0; i < 3; ++i) {
 		hbar_k_nrm += SQR(hbar_k[i]);
 	}
 	hbar_k_nrm = sqrt(hbar_k_nrm);
-	for (int i = 0; i < n; ++i) {
+	for (i = 0; i < n; ++i) {
 		add_radiation_pressure_one(ctx, hbar_k, hbar_k_nrm, nbars[i], f + 3 * i);
 	}
 }

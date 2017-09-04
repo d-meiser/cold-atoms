@@ -11,7 +11,8 @@
 static double distance(const double *r, double delta)
 {
 	double dist = 0.0;
-	for (int i = 0; i < 3; ++i) {
+	int i;
+	for (i = 0; i < 3; ++i) {
 		dist += r[i] * r[i];
 	}
 	dist += delta;
@@ -22,12 +23,13 @@ static void coulomb_force_one_pair(const double *r0, const double *r1,
 	double kij, double delta,  double *f)
 {
 	double r[NUM_COMPONENTS];
-	for (int m = 0; m < NUM_COMPONENTS; ++m) {
+	int m;
+	for (m = 0; m < NUM_COMPONENTS; ++m) {
 		r[m] = r0[m] - r1[m];
 	}
 	double dist = distance(r, delta);
 	double dist_cubed = dist * dist * dist;
-	for (int m = 0; m < NUM_COMPONENTS; ++m) {
+	for (m = 0; m < NUM_COMPONENTS; ++m) {
 		f[m] += kij * r[m] / dist_cubed;
 	}
 }
@@ -37,10 +39,11 @@ void ca_coulomb_force(const double *positions, double charge, double dt,
 	double delta, double k, double *forces)
 {
 	double kij = charge * charge * dt * k;
-	for (int i = 0; i < num_ptcls; ++i) {
+	int i, j;
+	for (i = 0; i < num_ptcls; ++i) {
 		const double *r0 = &positions[i * NUM_COMPONENTS];
 		double *f = &forces[i * NUM_COMPONENTS];
-		for (int j = 0; j < num_ptcls; ++j) {
+		for (j = 0; j < num_ptcls; ++j) {
 			if (j == i) continue;
 			const double *r1 = &positions[j * NUM_COMPONENTS];
 			coulomb_force_one_pair(r0, r1, kij, delta, f);
@@ -53,11 +56,12 @@ void ca_coulomb_force_per_particle_charge(const double *positions,
 					double delta, double k, double *forces)
 {
 	double kp = dt * k;
-	for (int i = 0; i < num_ptcls; ++i) {
+	int i, j;
+	for (i = 0; i < num_ptcls; ++i) {
 		double ki = kp * charge[i];
 		const double *r0 = &positions[i * NUM_COMPONENTS];
 		double *f = &forces[i * NUM_COMPONENTS];
-		for (int j = 0; j < num_ptcls; ++j) {
+		for (j = 0; j < num_ptcls; ++j) {
 			if (j == i) continue;
 			const double *r1 = &positions[j * NUM_COMPONENTS];
 			double kij = ki * charge[j];
@@ -76,7 +80,8 @@ void ca_harmonic_trap_forces(const double * positions,
 
 	double alpha = q * dt;
 
-	for (int i = 0; i < num_ptcls; ++i) {
+	int i;
+	for (i = 0; i < num_ptcls; ++i) {
 		double x = positions[i * NUM_COMPONENTS + 0];
 		double y = positions[i * NUM_COMPONENTS + 1];
 		double z = positions[i * NUM_COMPONENTS + 2];
@@ -99,9 +104,9 @@ void ca_harmonic_trap_forces_per_particle_charge(
 {
 	double cphi = cos(phi);
 	double sphi = sin(phi);
+	int i;
 
-
-	for (int i = 0; i < num_ptcls; ++i) {
+	for (i = 0; i < num_ptcls; ++i) {
 		double alpha = q[i] * dt;
 		double x = positions[i * NUM_COMPONENTS + 0];
 		double y = positions[i * NUM_COMPONENTS + 1];

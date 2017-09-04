@@ -25,7 +25,8 @@ void ca_bend_kick_update_scalar(double dt, double omegaB,
 		{cosTheta, -sinTheta},
 		{sinTheta, cosTheta}};
 
-	for (int i = 0; i < num_ptcls; ++i) {
+	int i;
+	for (i = 0; i < num_ptcls; ++i) {
 		pos[i].x += m_pos[0][0] * vel[i].x + m_pos[0][1] * vel[i].y;
 		pos[i].y += m_pos[1][0] * vel[i].x + m_pos[1][1] * vel[i].y;
 		pos[i].z += dt * vel[i].z;
@@ -43,8 +44,9 @@ void ca_bend_kick_update_vector(double dt, const double *  omegaB,
 {
 	struct Vec3 *pos = (struct Vec3 *)x;
 	struct Vec3 *vel = (struct Vec3 *)v;
+	int i;
 
-	for (int i = 0; i < num_ptcls; ++i) {
+	for (i = 0; i < num_ptcls; ++i) {
 		double theta = dt * omegaB[i];
 		double cosTheta = cos(theta);
 		double sinTheta = sin(theta);

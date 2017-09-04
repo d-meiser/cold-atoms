@@ -30,7 +30,8 @@ void ca_rand_seed(struct CARandCtx* ctx, int seed)
 
 void ca_rand(struct CARandCtx* ctx, int n, double* x)
 {
-	for (int i = 0; i < n; ++i) {
+	int i;
+	for (i = 0; i < n; ++i) {
 		x[i] = dsfmt_genrand_close_open(&ctx->dsfmt);
 	}
 }
@@ -62,7 +63,8 @@ static double generate_gaussian_random_number(struct CARandCtx* ctx, double mean
 void ca_rand_gaussian(struct CARandCtx* ctx, int n, double mean, double std,
 	double* x)
 {
-	for (int i = 0; i < n; ++i) {
+	int i;
+	for (i = 0; i < n; ++i) {
 		x[i] = generate_gaussian_random_number(ctx, mean, std);
 	}
 }
@@ -94,7 +96,8 @@ int generate_poisson_random_number(struct CARandCtx* ctx, double nbar) {
 
 void ca_rand_poisson(struct CARandCtx* ctx, int n, double nbar, int* x)
 {
-	for (int i = 0; i < n; ++i) {
+	int i;
+	for (i = 0; i < n; ++i) {
 		x[i] = generate_poisson_random_number(ctx, nbar);
 	}
 }
