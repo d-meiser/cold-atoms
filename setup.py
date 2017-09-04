@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages, Extension
 from Cython.Build import cythonize
 import numpy
+import sys
 
 
 with open('README.md') as f:
@@ -11,17 +12,18 @@ with open('LICENSE') as f:
     license = f.read()
 
 
-# TODO(Dominic): The following flags are suitable for gcc and clang. Down the
-# road this will have to be special cased for the different toolchains. Also,
-# the ISA is hardwired for now.
 extra_compile_args = [
-    '-std=c99',
-    '-ffast-math',
-    '-ftree-vectorize',
-    '-msse4',
     '-DHAVE_SSE2',
     '-DDSFMT_MEXP=19937'
     ]
+if 'win' in sys.platform:
+    pass
+else:
+    extra_compile_args += [
+        '-std=c99',
+        '-ffast-math',
+        '-ftree-vectorize',
+        '-msse4']
 
 extra_link_args = []
 
@@ -33,7 +35,7 @@ coldatoms_lib = cythonize([Extension(
              'src/coldatoms_lib/radiation_pressure.c',
              'src/coldatoms_lib/dSFMT/dSFMT.c',
              'src/coldatoms_lib/coldatoms_lib.pyx'],
-    include_dirs=['./src/coldatoms_lib/', numpy.get_include()],
+    include_dirs=['src/coldatoms_lib/', numpy.get_include()],
     extra_compile_args=extra_compile_args,
     extra_link_args=extra_link_args
     )])

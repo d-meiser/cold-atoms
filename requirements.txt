@@ -1,7 +1,9 @@
 numpy
 matplotlib
 nose
+wheel
 sphinx
 jupyter
 cython
+coveralls
 

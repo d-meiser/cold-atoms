@@ -15,7 +15,7 @@ where S is the laser field intensity in units of the saturation intensity,
 gamma is the atomic linewidth, dt is the duration of the time interval,
 and delta is the detuning from the atomic transition.
 */
-void compute_nbars(int n,
+void ca_compute_nbars(int n,
 	double dt,
 	double gamma,
 	const double* s_of_r,
@@ -33,7 +33,7 @@ nbar     is an array with the number of scattered photons for each atom.
 recoils  contains the recoild momenta for each atom in format [px0 py0 pz0 px1
          py1 pz1 ...].
 */
-void add_radiation_pressure(int n,
+void ca_add_radiation_pressure(int n,
         struct CARandCtx* ctx, 
 	const double* hbar_k,
 	const double* nbars,
