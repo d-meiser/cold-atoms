@@ -36,9 +36,11 @@ void ca_rand(struct CARandCtx* ctx, int n, double* x)
 	}
 }
 
-static double generate_gaussian_random_number(struct CARandCtx* ctx, double mean, double std) {
+static double generate_gaussian_random_number(struct CARandCtx* ctx, double mean, double std)
+{
 	const double epsilon = DBL_EPSILON;
 	const double two_pi = 2.0 * 3.14159265358979323846;
+	double u1, u2;
 
 	static double z0, z1;
 	static int generate = 0;
@@ -48,7 +50,6 @@ static double generate_gaussian_random_number(struct CARandCtx* ctx, double mean
 		return z1 * std + mean;
 	}
 
-	double u1, u2;
 	do {
 		u1 = dsfmt_genrand_close_open(&ctx->dsfmt);
 		u2 = dsfmt_genrand_close_open(&ctx->dsfmt);
@@ -82,10 +83,10 @@ static int generate_poisson_knuth(struct CARandCtx* ctx, double lambda) {
 
 int generate_poisson_random_number(struct CARandCtx* ctx, double nbar) {
 	static const double threshold_knuth = 25.0;
+	int sample;
 	if (nbar < threshold_knuth) {
 		return generate_poisson_knuth(ctx, nbar);
 	} else {
-		int sample;
 		do {
 			sample = round(
 				generate_gaussian_random_number(ctx, nbar, sqrt(nbar)));

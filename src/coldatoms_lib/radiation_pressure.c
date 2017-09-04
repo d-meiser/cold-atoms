@@ -64,11 +64,13 @@ static void add_radiation_pressure_small_n(
 	assert(n <= CA_LARGE_N);
 
 	double directions[3][CA_LARGE_N];
+	double nrms[CA_LARGE_N] = { 0.0 };
+	double recoil[3] = { 0.0 };
+	int i, j;
+
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[0][0]);
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[1][0]);
 	ca_rand_gaussian(ctx, n, 0.0, 1.0, &directions[2][0]);
-	double nrms[CA_LARGE_N] = { 0.0 };
-	int i, j;
 
 	for (i = 0; i < 3; ++i) {
 		for (j = 0; j < n; ++j) {
@@ -83,7 +85,7 @@ static void add_radiation_pressure_small_n(
 			directions[i][j] /= nrms[j];
 		}
 	}
-	double recoil[3] = { 0.0 };
+
 	for (i = 0; i < 3; ++i) {
 		for (j = 0; j < n; ++j) {
 			recoil[i] += directions[i][j];
