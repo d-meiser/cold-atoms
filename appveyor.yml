@@ -63,7 +63,7 @@ install:
   - "%CMD_IN_ENV% pip install -r requirements.txt"
 
   # Make sure we have stdint.h in a location where we can find it.
-  - cp "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdint.h" "C:\Users\appveyor\AppData\Local\Programs\Common\Microsoft\Visual C++ for Python\9.0\VC\include\stdint.h"
+  - cp "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdint.h" ".\\src\\coldatoms_lib\\stdint.h"
 
 build_script:
   # Build the compiled extension
