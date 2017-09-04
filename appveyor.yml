@@ -23,9 +23,10 @@ environment:
       PYTHON_VERSION: "3.4.x" # currently 3.4.3
       PYTHON_ARCH: "64"
 
-    # 32 bit versions don't work for now.
-    allow_failures:
-      - PYTHON_ARCH: "32"
+matrix:
+  # 32 bit versions don't work for now.
+  allow_failures:
+    - PYTHON_ARCH: "32"
 
 install:
   # If there is a newer build queued for the same PR, cancel this one.
