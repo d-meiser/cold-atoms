@@ -5,11 +5,11 @@ import coldatoms_lib
 def _harmonic_trap_forces_ref(positions, q, kx, ky, kz, phi, dt, f):
     cphi = np.cos(phi)
     sphi = np.sin(phi)
-    
+
     x = positions[:, 0]
     y = positions[:, 1]
     z = positions[:, 2]
-    
+
     f[:, 0] += dt * q * (
         (-kx * cphi * cphi - ky * sphi * sphi) * x + cphi * sphi * (ky - kx) * y)
     f[:, 1] += dt * q * (

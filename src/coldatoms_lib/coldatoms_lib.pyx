@@ -18,7 +18,7 @@ def coulomb_force(
 
     ccoldatoms_lib.ca_coulomb_force(
         &positions[0, 0], charge, dt, num_ptcls, delta, k, &forces[0, 0])
-    
+
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
