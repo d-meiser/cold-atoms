@@ -35,6 +35,15 @@ class Ensemble(object):
                 'Size of property array does not match number of particles.')
         self.particle_properties[key] = np.copy(prop)
 
+    def copy(self):
+        the_copy = Ensemble(self.num_ptcls)
+        the_copy.x = np.copy(self.x)
+        the_copy.v = np.copy(self.v)
+        the_copy.ensemble_properties = dict(self.ensemble_properties)
+        for key in self.particle_properties:
+            the_copy.particle_properties[key] = np.copy(self.particle_properties[key])
+        return the_copy
+
     def resize(self, new_size):
         shape = list(self.x.shape)
         shape[0] = new_size

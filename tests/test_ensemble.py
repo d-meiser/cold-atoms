@@ -133,3 +133,28 @@ def test_serialize_ensemble():
     ensemble.ensemble_properties['charge'] = 1.7
     check_json_roundtrip(ensemble)
 
+
+def test_can_copy_ensemble():
+    num_ptcls = 12
+    ensemble = coldatoms.Ensemble(num_ptcls)
+    ensemble.x = np.random.random_sample(tuple(ensemble.x.shape))
+    ensemble.v = np.random.random_sample(tuple(ensemble.v.shape))
+    ensemble.particle_properties['blah'] = np.random.random_sample(tuple(ensemble.v.shape))
+    cpy = ensemble.copy()
+    assert(arrays_close(ensemble.x, cpy.x))
+    assert(arrays_close(ensemble.v, cpy.v))
+    assert(arrays_close(
+        ensemble.particle_properties['blah'],
+        cpy.particle_properties['blah']))
+
+
+def test_copy_ensemble_is_deep():
+    num_ptcls = 12
+    ensemble = coldatoms.Ensemble(num_ptcls)
+    ensemble.x = np.random.random_sample(tuple(ensemble.x.shape))
+    orig_x = np.copy(ensemble.x)
+    cpy = ensemble.copy()
+    new_x = np.random.random_sample(tuple(ensemble.x.shape))
+    cpy.x = new_x
+    assert(arrays_close(ensemble.x, orig_x))
+    assert(arrays_close(cpy.x, new_x))
