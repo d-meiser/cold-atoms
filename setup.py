@@ -13,6 +13,9 @@ with open('LICENSE') as f:
     license = f.read()
 
 
+exec(open('src/coldatoms/version.py').read())
+
+
 extra_compile_args = [
     '-DDSFMT_MEXP=19937'
     ]
@@ -48,8 +51,8 @@ packages = find_packages(where='src',
                          exclude=('tests', 'docs', 'examples'))
 
 setup(
-    name='cold_atoms',
-    version='0.0.0',
+    name='coldatoms',
+    version=__version__,
     description='Collection of python tools for cold atoms simulations',
     long_description=readme,
     author='Dominic Meiser',

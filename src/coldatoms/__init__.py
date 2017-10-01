@@ -21,8 +21,9 @@ from .radiation_pressure import (
 from .penning_trap import (
     HarmonicTrapPotential
 )
+from .version import (
+    __version__
+)
 from coldatoms_lib import (
     Rng
 )
-
-
