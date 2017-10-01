@@ -2,6 +2,7 @@ from setuptools import setup, find_packages, Extension
 from Cython.Build import cythonize
 import numpy
 import sys
+import os
 
 
 with open('README.md') as f:
@@ -13,13 +14,16 @@ with open('LICENSE') as f:
 
 
 extra_compile_args = [
-    '-DHAVE_SSE2',
     '-DDSFMT_MEXP=19937'
     ]
 if 'win' in sys.platform:
-    pass
+    if os.environ['PYTHON_ARCH'] == '64':
+        extra_compile_args += [
+            '-DHAVE_SSE2'
+            ]
 else:
     extra_compile_args += [
+        '-DHAVE_SSE2',
         '-std=c99',
         '-ffast-math',
         '-ftree-vectorize',
