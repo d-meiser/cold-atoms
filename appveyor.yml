@@ -1,3 +1,6 @@
+# Since this is not a .NET project we build it in the install step
+build: off
+
 environment:
   global:
     # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
@@ -29,6 +32,8 @@ matrix:
     - PYTHON_ARCH: "32"
 
 install:
+  - ECHO "%PYTHON_VERSION%"
+
   # If there is a newer build queued for the same PR, cancel this one.
   # The AppVeyor 'rollout builds' option is supposed to serve the same
   # purpose but it is problematic because it tends to cancel builds pushed
@@ -54,7 +59,7 @@ install:
 
   # Upgrade to the latest version of pip to avoid it displaying warnings
   # about it being out of date.
-  - "pip install --disable-pip-version-check --user --upgrade pip"
+  - "%CMD_IN_ENV% pip install --disable-pip-version-check --user --upgrade pip"
 
   # Install the build dependencies of the project. If some dependencies contain
   # compiled extensions and are not provided as pre-built wheel packages,
@@ -65,7 +70,8 @@ install:
   # Make sure we have stdint.h in a location where we can find it.
   - cp "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdint.h" ".\\src\\coldatoms_lib\\stdint.h"
 
-build_script:
+  - IF "%PYTHON_ARCH%"=="32" (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86) ELSE (ECHO "probably a 64bit build")
+  - IF "%PYTHON_ARCH%"=="64" (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64) ELSE (ECHO "probably a 32bit build")
   # Build the compiled extension
   - "%CMD_IN_ENV% python setup.py develop"
 
