@@ -3,14 +3,6 @@ import sys
 import os
 
 
-with open('README.md') as f:
-    readme = f.read()
-
-
-with open('LICENSE') as f:
-    license = f.read()
-
-
 exec(open('src/coldatoms/version.py').read())
 
 
@@ -82,16 +74,19 @@ def get_package_info():
 
 
 def setup_package():
+    long_description = """The cold-atoms library is a tool box for the
+simulation of ensembles of neutral atoms or ions for atomic, molecular, and
+optical physics (AMO) experiments."""
     metadata = dict(
         name='coldatoms',
         maintainer='Dominic Meiser',
         version=__version__,
         description='Collection of python tools for cold atoms simulations',
-        long_description=readme,
+        long_description=long_description,
         author='Dominic Meiser',
         author_email='dmeiser79@gmail.com',
         url='https://github.com/d-meiser/cold-atoms',
-        license=license,
+        license='GPLv3',
         setup_requires=[
             'cython',
             'numpy',
@@ -105,7 +100,6 @@ def setup_package():
     if require_build(sys.argv):
         metadata.update(get_package_info())
     setup(**metadata)
-
 
 
 if __name__ == '__main__':
