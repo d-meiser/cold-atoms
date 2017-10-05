@@ -92,6 +92,15 @@ def setup_package():
         author_email='dmeiser79@gmail.com',
         url='https://github.com/d-meiser/cold-atoms',
         license=license,
+        setup_requires=[
+            'cython',
+            'numpy',
+        ],
+        install_requires=[
+            'cython',
+            'numpy',
+        ],
+
     )
     if require_build(sys.argv):
         metadata.update(get_package_info())
