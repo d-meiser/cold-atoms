@@ -44,7 +44,7 @@ def get_package_info():
     extra_compile_args = [
         '-DDSFMT_MEXP=19937'
         ]
-    if 'win' in sys.platform:
+    if sys.platform == 'win32':
         if os.environ['PYTHON_ARCH'] == '64':
             extra_compile_args += [
                 '-DHAVE_SSE2'
