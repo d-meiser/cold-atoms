@@ -1,2 +1,3 @@
+recursive-include src *.pyx *.pxd *.pxi *.c *.h
 include README.md
 include LICENSE
