@@ -1,17 +1,24 @@
 language: python
 python:
-  - "2.7"
-  - "3.4"
+- '2.7'
+- '3.4'
 install:
-  - pip install --upgrade pip
-  - pip install coveralls
-  - make init
-  - make build
-  - make develop
+- pip install --upgrade pip
+- pip install coveralls
+- make init
+- make build
+- make develop
 script:
-  - make test
-  - make run-notebooks
-  - sh ci/test_installation.sh
+- make test
+- make run-notebooks
+- sh ci/test_installation.sh
+- python setup.py sdist
 after_success:
-  - coveralls --rcfile=.coveragerc
-
+- coveralls --rcfile=.coveragerc
+deploy:
+  provider: pypi
+  user: d-meiser
+  password:
+    secure: ApS3+e+HZTnPqaFGouCL4uBNoqZqHxivFxNyIgn2HRkez7VWCNM0VHAa/eRGdUox4v+lDtwgsPsiXqG2EniIEhnnSC1EFME/btZRJHVXSWVCOFx8X5aVO4B9JOW3u9pJX7DhWm//wlUAS6cCJ5L5ehBCAP0YE+dNSRuO8we6IKgizxGDIP1BQd/LPPKOWrZ3AmXdZI/criFhyMJarbTualx7wDsVWQPIgCT6ooXuyjRAbQnxP78987TkDQM8q9kNmLeym9L+rv0jbif3vCh9/UzGcsLbKkQwZN+/yJ5ZGnjLXZE3+U/KzfOpFGa/MDeL0JLrBkt73Z/JLBHIR65lQiKn2tFoEGdSHxKuZGE2M/CmEDPP7k1fNughuHJUFWO96f8g6W3wHOIoUzILjIKKSd2pY5CvM+4ToBCQPJ/Mznsh7rCyc6wIzmmcNX6W7L6mH/lmzpMm5/Fn4Rjx8pp2lWWQNF2AFX4yJwQbjuOYG9kadsjIH+tKFiqwfVHg/9sieiyPP6ESHdPJy+/9E6guxdU6sfH1ITmhAZnXvpkdf1MaybJy9hSW8DiF0LYuB+SXrrKW5NRPaCSu5O5b3y1bCBTj8IN74+u5OeRvFobek9ObeDm7HtzkixTZMJEsPjUrGSixHQKMPP2v9qlHLy4mkki3DDkJQabhqMuYmNad0Bw=
+  on:
+    tags: true
