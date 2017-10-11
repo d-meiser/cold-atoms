@@ -12,6 +12,7 @@ script:
 - make test
 - make run-notebooks
 - sh ci/test_installation.sh
+- python setup.py sdist
 after_success:
 - coveralls --rcfile=.coveragerc
 deploy:
