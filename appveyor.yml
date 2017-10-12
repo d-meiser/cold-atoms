@@ -99,7 +99,6 @@ on_success:
   - echo index-servers =                             >> %USERPROFILE%\\.pypirc
   - echo     pypi                                    >> %USERPROFILE%\\.pypirc
   - echo [pypi]                                      >> %USERPROFILE%\\.pypirc
-  - echo repository=https://pypi.python.org/pypi     >> %USERPROFILE%\\.pypirc
   - echo username=d-meiser                           >> %USERPROFILE%\\.pypirc
   - echo password=%PYPIPASSWORD%                     >> %USERPROFILE%\\.pypirc
 
