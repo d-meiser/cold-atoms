@@ -106,5 +106,5 @@ on_success:
   # Workaround required to ensure setup.py finds the .pypirc under Windows
   - set HOME=%USERPROFILE%
 
-  - if "%APPVEYOR_REPO_TAG%"=="true" ( %CMD_IN_ENV% twine upload -r pypi dist\\bdist_wheel dist\\bdist_wininst dist\\bdist_msi ) else ( echo "Not deploying because not a tagged commit." )
+  - if "%APPVEYOR_REPO_TAG%"=="true" ( %CMD_IN_ENV% twine upload -r pypi dist\* ) else ( echo "Not deploying because not a tagged commit." )
 
