@@ -87,6 +87,17 @@ optical physics (AMO) experiments."""
         author_email='dmeiser79@gmail.com',
         url='https://github.com/d-meiser/cold-atoms',
         license='GPLv3',
+        classifiers=[
+            'Development Status :: 3 - Alpha',
+            'Intended Audience :: Education',
+            'Intended Audience :: Science/Research',
+            'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+            'Programming Language :: Python :: 2',
+            'Programming Language :: Python :: 2.7',
+            'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3.4',
+            'Topic :: Scientific/Engineering :: Physics',
+        ],
         setup_requires=[
             'cython',
             'numpy',
