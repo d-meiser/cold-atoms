@@ -5,12 +5,12 @@ python:
 install:
 - pip install --upgrade pip
 - pip install coveralls
-- make init
-- make build
-- make develop
+- pip install -r requirements.txt
+- python setup.py build
+- python setup.py develop
 script:
-- make test
-- make run-notebooks
+- nosetests --with-coverage --cover-package=coldatoms --logging-level=INFO
+- cd examples && python run_notebooks.py && cd ..
 - sh ci/test_installation.sh
 - python setup.py sdist
 after_success:
